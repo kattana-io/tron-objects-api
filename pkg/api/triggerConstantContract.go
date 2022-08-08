@@ -123,6 +123,55 @@ func (a *Api) GetPairToken(pair string) (string, error) {
 
 	return TrimZeroes(data.ConstantResult[0]), nil
 }
+func (a *Api) GetToken0(pair string) (string, error) {
+	postBody, _ := json.Marshal(map[string]interface{}{
+		"owner_address":     DummyCaller,
+		"contract_address":  pair,
+		"function_selector": "token0()",
+	})
+
+	res, err := a.provider.Request(a.provider.TriggerConstantContract(), postBody)
+	defer res.Body.Close()
+
+	if err != nil {
+		a.log.Error(err.Error())
+		return "", err
+	}
+
+	var data TCCResponse
+	decoder := json.NewDecoder(res.Body)
+	err = decoder.Decode(&data)
+	if err != nil || len(data.ConstantResult) == 0 {
+		return "", err
+	}
+
+	return TrimZeroes(data.ConstantResult[0]), nil
+}
+
+func (a *Api) GetToken1(pair string) (string, error) {
+	postBody, _ := json.Marshal(map[string]interface{}{
+		"owner_address":     DummyCaller,
+		"contract_address":  pair,
+		"function_selector": "token1()",
+	})
+
+	res, err := a.provider.Request(a.provider.TriggerConstantContract(), postBody)
+	defer res.Body.Close()
+
+	if err != nil {
+		a.log.Error(err.Error())
+		return "", err
+	}
+
+	var data TCCResponse
+	decoder := json.NewDecoder(res.Body)
+	err = decoder.Decode(&data)
+	if err != nil || len(data.ConstantResult) == 0 {
+		return "", err
+	}
+
+	return TrimZeroes(data.ConstantResult[0]), nil
+}
 
 func (a *Api) GetTokenName(hexAddress string) (string, error) {
 	postBody, _ := json.Marshal(map[string]interface{}{
