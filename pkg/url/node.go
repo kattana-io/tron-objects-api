@@ -14,11 +14,12 @@ type ApiUrlProvider interface {
 }
 
 type NodeUrlProvider struct {
-	host string
+	host    string
+	network string
 }
 
 func (n *NodeUrlProvider) GetBlockByNum() string {
-	return fmt.Sprintf("%s/walletsolidity/getblockbynum", n.host)
+	return fmt.Sprintf("%s/wallet/getblockbynum", n.network)
 }
 
 func (n *NodeUrlProvider) GetTransactionInfoById() string {
@@ -34,8 +35,9 @@ func (n *NodeUrlProvider) Request(url string, body []byte) (*http.Response, erro
 	return res, err
 }
 
-func NewNodeUrlProvider(host string) ApiUrlProvider {
+func NewNodeUrlProvider(host string, network string) ApiUrlProvider {
 	return &NodeUrlProvider{
-		host: host,
+		host:    host,
+		network: network,
 	}
 }
