@@ -18,15 +18,15 @@ type NodeUrlProvider struct {
 }
 
 func (n *NodeUrlProvider) GetBlockByNum() string {
-	return fmt.Sprintf("%s/walletsolidity/getblockbynum", n.host)
+	return fmt.Sprintf("%s/wallet/getblockbynum", n.host)
 }
 
 func (n *NodeUrlProvider) GetTransactionInfoById() string {
-	return fmt.Sprintf("%s/walletsolidity/gettransactioninfobyid", n.host)
+	return fmt.Sprintf("%s/wallet/gettransactioninfobyid", n.host)
 }
 
 func (n *NodeUrlProvider) TriggerConstantContract() string {
-	return fmt.Sprintf("%s/walletsolidity/triggerconstantcontract", n.host)
+	return fmt.Sprintf("%s/wallet/triggerconstantcontract", n.host)
 }
 
 func (n *NodeUrlProvider) Request(url string, body []byte) (*http.Response, error) {
