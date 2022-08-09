@@ -14,20 +14,19 @@ type ApiUrlProvider interface {
 }
 
 type NodeUrlProvider struct {
-	host    string
-	network string
+	host string
 }
 
 func (n *NodeUrlProvider) GetBlockByNum() string {
-	return fmt.Sprintf("%s/wallet/getblockbynum", n.network)
+	return fmt.Sprintf("%s/wallet/getblockbynum", n.host)
 }
 
 func (n *NodeUrlProvider) GetTransactionInfoById() string {
-	return fmt.Sprintf("%s/walletsolidity/gettransactioninfobyid", n.host)
+	return fmt.Sprintf("%s/wallet/gettransactioninfobyid", n.host)
 }
 
 func (n *NodeUrlProvider) TriggerConstantContract() string {
-	return fmt.Sprintf("%s/walletsolidity/triggerconstantcontract", n.host)
+	return fmt.Sprintf("%s/wallet/triggerconstantcontract", n.host)
 }
 
 func (n *NodeUrlProvider) Request(url string, body []byte) (*http.Response, error) {
@@ -35,9 +34,8 @@ func (n *NodeUrlProvider) Request(url string, body []byte) (*http.Response, erro
 	return res, err
 }
 
-func NewNodeUrlProvider(host string, network string) ApiUrlProvider {
+func NewNodeUrlProvider(host string) ApiUrlProvider {
 	return &NodeUrlProvider{
-		host:    host,
-		network: network,
+		host: host,
 	}
 }
