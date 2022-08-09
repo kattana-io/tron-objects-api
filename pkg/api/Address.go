@@ -41,6 +41,14 @@ func s256(s []byte) []byte {
 	return bs
 }
 
+// EmptyAddress - create empty address
+func EmptyAddress() *Address {
+	return &Address{
+		bytes: []byte{0, 0, 0, 0},
+		ok:    false,
+	}
+}
+
 // Credits to https://gist.github.com/motopig/c680f53897429fd15f5b3ca9aa6f6ed2
 func FromHex(input string) *Address {
 	address := addPrefix(removeZeroX(input))

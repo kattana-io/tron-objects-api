@@ -17,7 +17,7 @@ func New(api *api.Api, address api.Address) *Pair {
 func (s *Pair) GetTokenAddress() (*api.Address, error) {
 	res, err := s.api.GetPairToken(s.address.ToHex())
 	if err != nil {
-		return api.FromHex("0x0"), err
+		return api.EmptyAddress(), err
 	}
 	return api.FromHex(res), nil
 }
