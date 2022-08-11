@@ -26,6 +26,42 @@ func TestToken_GetDecimals(t1 *testing.T) {
 			want:    6,
 			wantErr: false,
 		},
+		{
+			name: "YBT Decimals",
+			fields: fields{
+				api:     api.NewApi("", nil, url.NewTrongridUrlProvider()),
+				address: api.FromBase58("TPGx2NszcNRvSDiDM3c1YXM5XSvcRwrHLP"),
+			},
+			want:    6,
+			wantErr: false,
+		},
+		{
+			name: "Tiger Decimals",
+			fields: fields{
+				api:     api.NewApi("", nil, url.NewTrongridUrlProvider()),
+				address: api.FromBase58("TQW9R6Ps1bXDJbTND6nTT5C5z2jDSbTDm8"),
+			},
+			want:    6,
+			wantErr: false,
+		},
+		{
+			name: "Tiger Decimals",
+			fields: fields{
+				api:     api.NewApi("", nil, url.NewTrongridUrlProvider()),
+				address: api.FromBase58("TQW9R6Ps1bXDJbTND6nTT5C5z2jDSbTDm8"),
+			},
+			want:    6,
+			wantErr: false,
+		},
+		{
+			name: "ZSTokenName (ZS) Decimals",
+			fields: fields{
+				api:     api.NewApi("", nil, url.NewTrongridUrlProvider()),
+				address: api.FromBase58("TMTc7Z9zG9oRTUN6Yhmb7kGa6PCJmV2GhE"),
+			},
+			want:    6,
+			wantErr: false,
+		},
 	}
 	for _, tt := range tests {
 		t1.Run(tt.name, func(t1 *testing.T) {
