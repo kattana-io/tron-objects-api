@@ -51,6 +51,14 @@ func EmptyAddress() *Address {
 
 // Credits to https://gist.github.com/motopig/c680f53897429fd15f5b3ca9aa6f6ed2
 func FromHex(input string) *Address {
+	// Check for empty string
+	if len(input) == 0 {
+		return &Address{
+			bytes: []byte{},
+			ok:    false,
+		}
+	}
+
 	address := addPrefix(removeZeroX(input))
 	addb, _ := hex.DecodeString(address)
 	hash1 := s256(s256(addb))

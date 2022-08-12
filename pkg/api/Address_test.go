@@ -111,6 +111,13 @@ func TestFromHex(t *testing.T) {
 			},
 			want: "TYukBQZ2XXCcRCReAUguyXncCWNY9CEiDQ",
 		},
+		{
+			name: "Empty string",
+			args: args{
+				input: "",
+			},
+			want: "",
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
