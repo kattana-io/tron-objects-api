@@ -1,4 +1,4 @@
-package justomoney
+package justmoney
 
 import (
 	"github.com/kattana-io/tron-objects-api/pkg/api"
