@@ -9,7 +9,7 @@ type Token struct {
 	address *api.Address
 }
 
-func NewTRC20Token(api *api.Api, address *api.Address) *Token {
+func New(api *api.Api, address *api.Address) *Token {
 	return &Token{
 		api:     api,
 		address: address,
