@@ -35,13 +35,13 @@ func (a *Api) GetTransactionInfoById(id string) (*GetTransactionInfoByIdResp, er
 	})
 
 	res, err := a.provider.Request(a.provider.GetTransactionInfoById(), postBody)
-	defer res.Body.Close()
-
 	if err != nil {
 		a.log.Warn("Could not load tx: " + id)
 		a.log.Error(err.Error())
 		return &GetTransactionInfoByIdResp{}, err
 	}
+
+	defer res.Body.Close()
 
 	var data GetTransactionInfoByIdResp
 	decoder := json.NewDecoder(res.Body)
