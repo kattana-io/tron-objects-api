@@ -53,12 +53,12 @@ func (a *Api) TriggerConstantContract(contractAddress string, functionSelector s
 	})
 
 	res, err := a.provider.Request(a.provider.TriggerConstantContract(), postBody)
-	defer res.Body.Close()
-
 	if err != nil {
 		a.log.Error(err.Error())
 		return &TCCResponse{}, err
 	}
+
+	defer res.Body.Close()
 
 	var data TCCResponse
 	decoder := json.NewDecoder(res.Body)
@@ -78,12 +78,12 @@ func (a *Api) GetTokenDecimals(token string) (int32, error) {
 	})
 
 	res, err := a.provider.Request(a.provider.TriggerConstantContract(), postBody)
-	defer res.Body.Close()
-
 	if err != nil {
 		a.log.Error(err.Error())
 		return 18, err
 	}
+
+	defer res.Body.Close()
 
 	var data TCCResponse
 	decoder := json.NewDecoder(res.Body)
@@ -107,12 +107,11 @@ func (a *Api) GetPairToken(pair string) (string, error) {
 	})
 
 	res, err := a.provider.Request(a.provider.TriggerConstantContract(), postBody)
-	defer res.Body.Close()
-
 	if err != nil {
 		a.log.Error(err.Error())
 		return "", err
 	}
+	defer res.Body.Close()
 
 	var data TCCResponse
 	decoder := json.NewDecoder(res.Body)
@@ -131,12 +130,12 @@ func (a *Api) GetToken0(pair string) (string, error) {
 	})
 
 	res, err := a.provider.Request(a.provider.TriggerConstantContract(), postBody)
-	defer res.Body.Close()
-
 	if err != nil {
 		a.log.Error(err.Error())
 		return "", err
 	}
+
+	defer res.Body.Close()
 
 	var data TCCResponse
 	decoder := json.NewDecoder(res.Body)
@@ -156,12 +155,11 @@ func (a *Api) GetToken1(pair string) (string, error) {
 	})
 
 	res, err := a.provider.Request(a.provider.TriggerConstantContract(), postBody)
-	defer res.Body.Close()
-
 	if err != nil {
 		a.log.Error(err.Error())
 		return "", err
 	}
+	defer res.Body.Close()
 
 	var data TCCResponse
 	decoder := json.NewDecoder(res.Body)
@@ -182,12 +180,11 @@ func (a *Api) GetTokenName(hexAddress string) (string, error) {
 	responseBody := bytes.NewBuffer(postBody)
 
 	res, err := http.Post(a.provider.TriggerConstantContract(), "application/json", responseBody)
-	defer res.Body.Close()
-
 	if err != nil {
 		a.log.Error(err.Error())
 		return "", err
 	}
+	defer res.Body.Close()
 
 	var data TCCResponse
 	decoder := json.NewDecoder(res.Body)
@@ -215,12 +212,11 @@ func (a *Api) GetTokenSymbol(hexAddress string) (string, error) {
 	responseBody := bytes.NewBuffer(postBody)
 
 	res, err := http.Post(a.provider.TriggerConstantContract(), "application/json", responseBody)
-	defer res.Body.Close()
-
 	if err != nil {
 		a.log.Error(err.Error())
 		return "", err
 	}
+	defer res.Body.Close()
 
 	var data TCCResponse
 	decoder := json.NewDecoder(res.Body)

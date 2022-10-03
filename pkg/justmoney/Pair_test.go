@@ -26,6 +26,33 @@ func TestPair_Token0(t *testing.T) {
 			want:    "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
 			wantErr: false,
 		},
+		{
+			name: "TRX/USDT",
+			fields: fields{
+				api:     api.NewApi("", nil, url.NewTrongridUrlProvider()),
+				address: *api.FromBase58("TYA7DfE44XFsZEpBm7M2HAmEgU5kCtDDXg"),
+			},
+			want:    "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+			wantErr: false,
+		},
+		{
+			name: "PROS/TRX",
+			fields: fields{
+				api:     api.NewApi("", nil, url.NewTrongridUrlProvider()),
+				address: *api.FromBase58("TA7hPWMWPWoadfFKWpTAdPYVZd3SNdtBDE"),
+			},
+			want:    "TFf1aBoNFqxN32V2NQdvNrXVyYCy9qY8p1",
+			wantErr: false,
+		},
+		{
+			name: "(Not a justmoney pair) AOT/TRX",
+			fields: fields{
+				api:     api.NewApi("", nil, url.NewTrongridUrlProvider()),
+				address: *api.FromBase58("TUer6gnscMcEX8Pid2FtwBCCS4coKRCrtL"),
+			},
+			want:    "1111",
+			wantErr: true,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

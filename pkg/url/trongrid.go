@@ -44,3 +44,7 @@ func (n *TrongridUrlProvider) GetTransactionInfoById() string {
 func (n *TrongridUrlProvider) TriggerConstantContract() string {
 	return "https://api.trongrid.io/wallet/triggerconstantcontract"
 }
+
+func (n *TrongridUrlProvider) GetContractInfo() string {
+	return "https://api.trongrid.io/wallet/getcontractinfo"
+}

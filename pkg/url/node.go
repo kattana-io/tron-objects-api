@@ -11,10 +11,15 @@ type ApiUrlProvider interface {
 	GetBlockByNum() string
 	GetTransactionInfoById() string
 	TriggerConstantContract() string
+	GetContractInfo() string
 }
 
 type NodeUrlProvider struct {
 	host string
+}
+
+func (n *NodeUrlProvider) GetContractInfo() string {
+	return fmt.Sprintf("%s/wallet/getcontractinfo", n.host)
 }
 
 func (n *NodeUrlProvider) GetBlockByNum() string {
