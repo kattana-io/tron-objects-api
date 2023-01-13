@@ -81,3 +81,11 @@ func (a *Address) ToBase58() string {
 func (a *Address) ToHex() string {
 	return hex.EncodeToString(a.bytes)[:42]
 }
+
+func (a *Address) GetBytes() []byte {
+	return a.bytes
+}
+
+func (a *Address) GetStatus() bool {
+	return a.ok
+}
