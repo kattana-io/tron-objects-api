@@ -85,3 +85,7 @@ func (a *Address) ToHex() string {
 func (a *Address) GetBytes() []byte {
 	return a.bytes
 }
+
+func (a *Address) GetStatus() bool {
+	return a.ok
+}
