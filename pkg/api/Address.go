@@ -58,8 +58,11 @@ func FromHex(input string) *Address {
 			ok:    false,
 		}
 	}
-
-	address := addPrefix(removeZeroX(input))
+	input = removeZeroX(input)
+	if len(input)%2 == 1 {
+		input = "0" + input
+	}
+	address := addPrefix(input)
 	addb, _ := hex.DecodeString(address)
 	hash1 := s256(s256(addb))
 	secret := hash1[:4]
