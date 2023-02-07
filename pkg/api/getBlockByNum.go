@@ -30,9 +30,16 @@ type Transaction struct {
 		Contract []struct {
 			Parameter struct {
 				Value struct {
-					Data            string `json:"data"`
+					Amount          int64  `json:"amount,omitempty"`
+					AssetName       string `json:"asset_name,omitempty"`
 					OwnerAddress    string `json:"owner_address"`
-					ContractAddress string `json:"contract_address"`
+					ToAddress       string `json:"to_address,omitempty"`
+					Data            string `json:"data,omitempty"`
+					ContractAddress string `json:"contract_address,omitempty"`
+					Resource        string `json:"resource,omitempty"`
+					ReceiverAddress string `json:"receiver_address,omitempty"`
+					FrozenDuration  int    `json:"frozen_duration,omitempty"`
+					FrozenBalance   int    `json:"frozen_balance,omitempty"`
 					CallValue       int    `json:"call_value,omitempty"`
 				} `json:"value"`
 				TypeUrl string `json:"type_url"`
