@@ -61,12 +61,11 @@ func (a *Api) GetBlockByNum(number int32) (*GetBlockByNumResp, error) {
 	})
 
 	res, err := a.provider.Request(a.provider.GetBlockByNum(), postBody)
-	defer res.Body.Close()
-
 	if err != nil {
 		a.log.Error(err.Error())
 		return &GetBlockByNumResp{}, err
 	}
+	defer res.Body.Close()
 
 	var data GetBlockByNumResp
 	decoder := json.NewDecoder(res.Body)
