@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/ethereum/go-ethereum/common/hexutil"
-	"net/http"
 	"strconv"
 )
 
@@ -43,53 +42,45 @@ type TCCResponse struct {
 	} `json:"transaction"`
 }
 
+func (a *API) TCCRequest(input map[string]any) (*TCCResponse, error) {
+	postBody, _ := json.Marshal(input)
+	var result TCCResponse
+
+	res, err := a.provider.Request(a.provider.TriggerConstantContract(), postBody)
+	if err != nil {
+		a.log.Error(err.Error())
+		return &TCCResponse{}, err
+	}
+	defer res.Body.Close()
+
+	decoder := json.NewDecoder(res.Body)
+	err = decoder.Decode(&result)
+	if err != nil {
+		return &result, err
+	}
+
+	return &result, nil
+}
+
 // TriggerConstantContract /**
 func (a *API) TriggerConstantContract(contractAddress, functionSelector, parameter string) (*TCCResponse, error) {
-	postBody, _ := json.Marshal(map[string]any{
+	return a.TCCRequest(map[string]any{
 		"owner_address":     DummyCaller,
 		"contract_address":  contractAddress,
 		"function_selector": functionSelector,
 		"parameter":         parameter,
 	})
-
-	res, err := a.provider.Request(a.provider.TriggerConstantContract(), postBody)
-	if err != nil {
-		a.log.Error(err.Error())
-		return &TCCResponse{}, err
-	}
-
-	defer res.Body.Close()
-
-	var data TCCResponse
-	decoder := json.NewDecoder(res.Body)
-	err = decoder.Decode(&data)
-	if err != nil {
-		return &TCCResponse{}, err
-	}
-
-	return &data, nil
 }
 
 const defaultDecimals = 18
 
 func (a *API) GetTokenDecimals(token string) (int32, error) {
-	postBody, _ := json.Marshal(map[string]any{
+	data, err := a.TCCRequest(map[string]any{
 		"owner_address":     DummyCaller,
 		"contract_address":  token,
 		"function_selector": "decimals()",
 	})
 
-	res, err := a.provider.Request(a.provider.TriggerConstantContract(), postBody)
-	if err != nil {
-		a.log.Error(err.Error())
-		return defaultDecimals, err
-	}
-
-	defer res.Body.Close()
-
-	var data TCCResponse
-	decoder := json.NewDecoder(res.Body)
-	err = decoder.Decode(&data)
 	if err != nil || len(data.ConstantResult) == 0 {
 		return defaultDecimals, err
 	}
@@ -101,24 +92,13 @@ func (a *API) GetTokenDecimals(token string) (int32, error) {
 	return int32(result), nil
 }
 
-//nolint:dupl
 func (a *API) GetPairToken(pair string) (string, error) {
-	postBody, _ := json.Marshal(map[string]interface{}{
+	data, err := a.TCCRequest(map[string]any{
 		"owner_address":     DummyCaller,
 		"contract_address":  pair,
 		"function_selector": "tokenAddress()",
 	})
 
-	res, err := a.provider.Request(a.provider.TriggerConstantContract(), postBody)
-	if err != nil {
-		a.log.Error(err.Error())
-		return "", err
-	}
-	defer res.Body.Close()
-
-	var data TCCResponse
-	decoder := json.NewDecoder(res.Body)
-	err = decoder.Decode(&data)
 	if err != nil || len(data.ConstantResult) == 0 {
 		return "", err
 	}
@@ -126,25 +106,13 @@ func (a *API) GetPairToken(pair string) (string, error) {
 	return TrimZeroes(data.ConstantResult[0]), nil
 }
 
-//nolint:dupl
 func (a *API) GetToken0(pair string) (string, error) {
-	postBody, _ := json.Marshal(map[string]interface{}{
+	data, err := a.TCCRequest(map[string]any{
 		"owner_address":     DummyCaller,
 		"contract_address":  pair,
 		"function_selector": "token0()",
 	})
 
-	res, err := a.provider.Request(a.provider.TriggerConstantContract(), postBody)
-	if err != nil {
-		a.log.Error(err.Error())
-		return "", err
-	}
-
-	defer res.Body.Close()
-
-	var data TCCResponse
-	decoder := json.NewDecoder(res.Body)
-	err = decoder.Decode(&data)
 	if err != nil || len(data.ConstantResult) == 0 {
 		return "", err
 	}
@@ -152,24 +120,13 @@ func (a *API) GetToken0(pair string) (string, error) {
 	return TrimZeroes(data.ConstantResult[0]), nil
 }
 
-//nolint:dupl
 func (a *API) GetToken1(pair string) (string, error) {
-	postBody, _ := json.Marshal(map[string]interface{}{
+	data, err := a.TCCRequest(map[string]any{
 		"owner_address":     DummyCaller,
 		"contract_address":  pair,
 		"function_selector": "token1()",
 	})
 
-	res, err := a.provider.Request(a.provider.TriggerConstantContract(), postBody)
-	if err != nil {
-		a.log.Error(err.Error())
-		return "", err
-	}
-	defer res.Body.Close()
-
-	var data TCCResponse
-	decoder := json.NewDecoder(res.Body)
-	err = decoder.Decode(&data)
 	if err != nil || len(data.ConstantResult) == 0 {
 		return "", err
 	}
@@ -178,56 +135,33 @@ func (a *API) GetToken1(pair string) (string, error) {
 }
 
 func (a *API) GetTokenName(hexAddress string) (string, error) {
-	postBody, _ := json.Marshal(map[string]interface{}{
+	data, err := a.TCCRequest(map[string]any{
 		"owner_address":     DummyCaller,
 		"contract_address":  hexAddress,
 		"function_selector": "name()",
 	})
-	responseBody := bytes.NewBuffer(postBody)
 
-	res, err := http.Post(a.provider.TriggerConstantContract(), "application/json", responseBody)
-	if err != nil {
-		a.log.Error(err.Error())
-		return "", err
-	}
-	defer res.Body.Close()
-
-	var data TCCResponse
-	decoder := json.NewDecoder(res.Body)
-	err = decoder.Decode(&data)
 	if err != nil || len(data.ConstantResult) == 0 {
 		return "", err
 	}
 
 	decodedData, err := hexutil.Decode(fmt.Sprintf("0x%s", data.ConstantResult[0][128:]))
-	decodedData = bytes.TrimRight(decodedData, "\u0000")
 	if err != nil {
 		a.log.Error(err.Error())
 		return "", err
 	}
+	decodedData = bytes.TrimRight(decodedData, "\u0000")
 
 	return string(decodedData), nil
 }
 
 func (a *API) GetTokenSymbol(hexAddress string) (string, error) {
-	postBody, _ := json.Marshal(map[string]interface{}{
+	data, err := a.TCCRequest(map[string]any{
 		"owner_address":     DummyCaller,
 		"contract_address":  hexAddress,
 		"function_selector": "symbol()",
 	})
-	responseBody := bytes.NewBuffer(postBody)
 
-	//nolint:noctx
-	res, err := http.Post(a.provider.TriggerConstantContract(), "application/json", responseBody)
-	if err != nil {
-		a.log.Error(err.Error())
-		return "", err
-	}
-	defer res.Body.Close()
-
-	var data TCCResponse
-	decoder := json.NewDecoder(res.Body)
-	err = decoder.Decode(&data)
 	if err != nil || len(data.ConstantResult) == 0 {
 		return "", err
 	}

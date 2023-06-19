@@ -2,6 +2,7 @@ package url
 
 import (
 	"bytes"
+	"context"
 	"net/http"
 	"os"
 )
@@ -9,6 +10,7 @@ import (
 /**
  * TronGrid URLs
  */
+const trongridHost = "https://api.trongrid.io"
 
 func NewTrongridURLProvider() APIURLProvider {
 	return &TrongridURLProvider{
@@ -22,8 +24,9 @@ type TrongridURLProvider struct {
 
 // Request - Add headers to request https://developers.tron.network/reference/api-key#how-to-use-api-keys
 func (n *TrongridURLProvider) Request(url string, body []byte) (resp *http.Response, err error) {
-	client := &http.Client{}
-	//nolint:noctx
+	ctx, cancel := context.WithTimeout(context.Background(), maxTimeout)
+	defer cancel()
+
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(body))
 	if err != nil {
 		return nil, err
@@ -32,23 +35,25 @@ func (n *TrongridURLProvider) Request(url string, body []byte) (resp *http.Respo
 		req.Header.Add("TRON-PRO-API-KEY", n.APIKey)
 	}
 	req.Header.Add("Content-Type", "application/json")
+	req = req.WithContext(ctx)
+	client := http.DefaultClient
 	resp, err = client.Do(req)
 
 	return resp, err
 }
 
 func (n *TrongridURLProvider) GetBlockByNum() string {
-	return "https://api.trongrid.io/wallet/getblockbynum"
+	return trongridHost + "/wallet/getblockbynum"
 }
 
 func (n *TrongridURLProvider) GetTransactionInfoByID() string {
-	return "https://api.trongrid.io/wallet/gettransactioninfobyid"
+	return trongridHost + "/wallet/gettransactioninfobyid"
 }
 
 func (n *TrongridURLProvider) TriggerConstantContract() string {
-	return "https://api.trongrid.io/wallet/triggerconstantcontract"
+	return trongridHost + "/wallet/triggerconstantcontract"
 }
 
 func (n *TrongridURLProvider) GetContractInfo() string {
-	return "https://api.trongrid.io/wallet/getcontractinfo"
+	return trongridHost + "/wallet/getcontractinfo"
 }
