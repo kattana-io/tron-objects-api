@@ -24,10 +24,6 @@ jobs:
           go-version: '1.20'
           cache: false
       - uses: actions/checkout@v3
-      - name: add external pkg
-        run: |
-          git config --global url."https://gitlab+deploy-token-569974:GQSyYDuPcXLiPJTX-fWB@gitlab.com/kattana/packager.git".insteadOf "https://gitlab.com/kattana/packager.git"
-          export GOPRIVATE=gitlab.com/kattana/*
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v3
         with:
