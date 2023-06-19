@@ -42,8 +42,13 @@ type TCCResponse struct {
 	} `json:"transaction"`
 }
 
+// TCCRequest - do a trigger constant contract call
 func (a *API) TCCRequest(input map[string]any) (*TCCResponse, error) {
-	postBody, _ := json.Marshal(input)
+	postBody, err := json.Marshal(&input)
+	if err != nil {
+		return nil, err
+	}
+
 	var result TCCResponse
 
 	res, err := a.provider.Request(a.provider.TriggerConstantContract(), postBody)
@@ -132,6 +137,20 @@ func (a *API) GetToken1(pair string) (string, error) {
 	}
 
 	return TrimZeroes(data.ConstantResult[0]), nil
+}
+
+func (a *API) GetPairReserves(pair string) (string, error) {
+	data, err := a.TCCRequest(map[string]any{
+		"owner_address":     DummyCaller,
+		"contract_address":  pair,
+		"function_selector": "getReserves()",
+	})
+
+	if err != nil || len(data.ConstantResult) == 0 {
+		return "", err
+	}
+
+	return data.ConstantResult[0], nil
 }
 
 func (a *API) GetTokenName(hexAddress string) (string, error) {

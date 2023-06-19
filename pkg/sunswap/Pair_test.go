@@ -1,6 +1,7 @@
 package sunswap
 
 import (
+	"fmt"
 	"github.com/kattana-io/tron-objects-api/pkg/api"
 	"github.com/kattana-io/tron-objects-api/pkg/url"
 	"testing"
@@ -82,6 +83,37 @@ func TestSunswapPair_GetTokenAddress(t *testing.T) {
 			hasErr := err != nil
 			if got.ToBase58() != tt.want && hasErr != tt.error {
 				t.Errorf("GetTokenAddress() = %v, want %v", got.ToBase58(), tt.want)
+			}
+		})
+	}
+}
+
+func TestPair_GetReserves(t *testing.T) {
+	type fields struct {
+		api     *api.API
+		address api.Address
+	}
+	tests := []struct {
+		name   string
+		fields fields
+	}{
+		{
+			name: "",
+			fields: fields{
+				api:     api.NewAPI("", nil, url.NewTrongridURLProvider()),
+				address: *api.FromBase58("TTdeCobmYxhfFBYUZbiQqbZ56zrFkSE5DG"),
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := &Pair{
+				api:     tt.fields.api,
+				address: tt.fields.address,
+			}
+			resA, resB, err := s.GetReserves()
+			if err != nil {
+				fmt.Println(resA.String(), resB.String())
 			}
 		})
 	}
