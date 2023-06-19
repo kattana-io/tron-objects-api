@@ -5,10 +5,10 @@ import (
 	"errors"
 )
 
-type GetTransactionInfoByIdResp struct {
+type GetTransactionInfoByIDResp struct {
 	Error string `json:"Error"`
 
-	Id              string   `json:"id"`
+	ID              string   `json:"id"`
 	Fee             int      `json:"fee"`
 	BlockNumber     int      `json:"blockNumber"`
 	BlockTimeStamp  int64    `json:"blockTimeStamp"`
@@ -29,26 +29,26 @@ type Log struct {
 	Data    string   `json:"data"`
 }
 
-func (a *Api) GetTransactionInfoById(id string) (*GetTransactionInfoByIdResp, error) {
-	postBody, _ := json.Marshal(map[string]interface{}{
+func (a *API) GetTransactionInfoByID(id string) (*GetTransactionInfoByIDResp, error) {
+	postBody, _ := json.Marshal(map[string]any{
 		"value": id,
 	})
 
-	res, err := a.provider.Request(a.provider.GetTransactionInfoById(), postBody)
+	res, err := a.provider.Request(a.provider.GetTransactionInfoByID(), postBody)
 	if err != nil {
 		a.log.Warn("Could not load tx: " + id)
 		a.log.Error(err.Error())
-		return &GetTransactionInfoByIdResp{}, err
+		return &GetTransactionInfoByIDResp{}, err
 	}
 
 	defer res.Body.Close()
 
-	var data GetTransactionInfoByIdResp
+	var data GetTransactionInfoByIDResp
 	decoder := json.NewDecoder(res.Body)
 	err = decoder.Decode(&data)
 	if err != nil {
 		a.log.Warn("Could not load tx: " + id)
-		return &GetTransactionInfoByIdResp{}, err
+		return &GetTransactionInfoByIDResp{}, err
 	}
 
 	if data.Error != "" {

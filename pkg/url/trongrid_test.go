@@ -4,7 +4,7 @@ import "testing"
 
 func TestTrongridUrlProvider_TriggerConstantContract(t *testing.T) {
 	type fields struct {
-		ApiKey string
+		APIKey string
 	}
 	tests := []struct {
 		name   string
@@ -19,8 +19,8 @@ func TestTrongridUrlProvider_TriggerConstantContract(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			n := &TrongridUrlProvider{
-				ApiKey: tt.fields.ApiKey,
+			n := &TrongridURLProvider{
+				APIKey: tt.fields.APIKey,
 			}
 			if got := n.TriggerConstantContract(); got != tt.want {
 				t.Errorf("TriggerConstantContract() = %v, want %v", got, tt.want)

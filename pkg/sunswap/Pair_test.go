@@ -1,6 +1,7 @@
 package sunswap
 
 import (
+	"fmt"
 	"github.com/kattana-io/tron-objects-api/pkg/api"
 	"github.com/kattana-io/tron-objects-api/pkg/url"
 	"testing"
@@ -8,7 +9,7 @@ import (
 
 func TestSunswapPair_GetTokenAddress(t *testing.T) {
 	type fields struct {
-		api     *api.Api
+		api     *api.API
 		address api.Address
 	}
 	tests := []struct {
@@ -20,7 +21,7 @@ func TestSunswapPair_GetTokenAddress(t *testing.T) {
 		{
 			name: "USDT/TRX",
 			fields: fields{
-				api:     api.NewApi("", nil, url.NewTrongridUrlProvider()),
+				api:     api.NewAPI("", nil, url.NewTrongridURLProvider()),
 				address: *api.FromBase58("TQn9Y2khEsLJW1ChVWFMSMeRDow5KcbLSE"),
 			},
 			want:  "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
@@ -29,7 +30,7 @@ func TestSunswapPair_GetTokenAddress(t *testing.T) {
 		{
 			name: "KBC/TRX",
 			fields: fields{
-				api:     api.NewApi("", nil, url.NewTrongridUrlProvider()),
+				api:     api.NewAPI("", nil, url.NewTrongridURLProvider()),
 				address: *api.FromBase58("TLP9cpp3B8WQNUXgbvjuYvvWUpmA4bzv4V"),
 			},
 			want:  "TUGrjLMegH5jvnaS2at6inkmNAWvtqTRFa",
@@ -38,7 +39,7 @@ func TestSunswapPair_GetTokenAddress(t *testing.T) {
 		{
 			name: "BAGH/TRX",
 			fields: fields{
-				api:     api.NewApi("", nil, url.NewTrongridUrlProvider()),
+				api:     api.NewAPI("", nil, url.NewTrongridURLProvider()),
 				address: *api.FromBase58("TLYE9Qz3Kue6EV8Na5aNki9Jkk8rZHp8Yo"),
 			},
 			want:  "TKZyr8jUu3aZZtUNQ6cRzML91oPUvUKxEJ",
@@ -47,7 +48,7 @@ func TestSunswapPair_GetTokenAddress(t *testing.T) {
 		{
 			name: "BC/TRX",
 			fields: fields{
-				api:     api.NewApi("", nil, url.NewTrongridUrlProvider()),
+				api:     api.NewAPI("", nil, url.NewTrongridURLProvider()),
 				address: *api.FromBase58("TLZbTD6Yg6iBWX6wKvYAsxE83vwweRVtuU"),
 			},
 			want:  "TJ7s4HjC1dYapZZnMq96VD6XcEEH3GKx1x",
@@ -56,7 +57,7 @@ func TestSunswapPair_GetTokenAddress(t *testing.T) {
 		{
 			name: "META/TRX",
 			fields: fields{
-				api:     api.NewApi("", nil, url.NewTrongridUrlProvider()),
+				api:     api.NewAPI("", nil, url.NewTrongridURLProvider()),
 				address: *api.FromBase58("TLaeHRNDoP2YaccQwqzYJdJjwfzJ6DcKR5"),
 			},
 			want:  "TPvyF8CD6eknF7hgfoZgZ9capryqQALQ52",
@@ -65,7 +66,7 @@ func TestSunswapPair_GetTokenAddress(t *testing.T) {
 		{
 			name: "(Not sunswap pair) MEOX/JM",
 			fields: fields{
-				api:     api.NewApi("", nil, url.NewTrongridUrlProvider()),
+				api:     api.NewAPI("", nil, url.NewTrongridURLProvider()),
 				address: *api.FromBase58("TMS2EaT8oKQcNmrbjArhi1umN1kFStRqrj"),
 			},
 			want:  "",
@@ -82,6 +83,37 @@ func TestSunswapPair_GetTokenAddress(t *testing.T) {
 			hasErr := err != nil
 			if got.ToBase58() != tt.want && hasErr != tt.error {
 				t.Errorf("GetTokenAddress() = %v, want %v", got.ToBase58(), tt.want)
+			}
+		})
+	}
+}
+
+func TestPair_GetReserves(t *testing.T) {
+	type fields struct {
+		api     *api.API
+		address api.Address
+	}
+	tests := []struct {
+		name   string
+		fields fields
+	}{
+		{
+			name: "",
+			fields: fields{
+				api:     api.NewAPI("", nil, url.NewTrongridURLProvider()),
+				address: *api.FromBase58("TTdeCobmYxhfFBYUZbiQqbZ56zrFkSE5DG"),
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := &Pair{
+				api:     tt.fields.api,
+				address: tt.fields.address,
+			}
+			resA, resB, err := s.GetReserves()
+			if err != nil {
+				fmt.Println(resA.String(), resB.String())
 			}
 		})
 	}

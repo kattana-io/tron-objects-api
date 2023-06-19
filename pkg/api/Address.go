@@ -52,7 +52,7 @@ func EmptyAddress() *Address {
 // Credits to https://gist.github.com/motopig/c680f53897429fd15f5b3ca9aa6f6ed2
 func FromHex(input string) *Address {
 	// Check for empty string
-	if len(input) == 0 {
+	if input == "" {
 		return &Address{
 			bytes: []byte{},
 			ok:    false,
@@ -66,9 +66,7 @@ func FromHex(input string) *Address {
 	addb, _ := hex.DecodeString(address)
 	hash1 := s256(s256(addb))
 	secret := hash1[:4]
-	for _, v := range secret {
-		addb = append(addb, v)
-	}
+	addb = append(addb, secret...)
 
 	return &Address{
 		bytes: addb,

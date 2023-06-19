@@ -11,7 +11,7 @@ func TestApi_GetTokenDecimals(t *testing.T) {
 	type fields struct {
 		endpoint string
 		log      *zap.Logger
-		provider url.ApiUrlProvider
+		provider url.APIURLProvider
 	}
 	type args struct {
 		token string
@@ -28,7 +28,7 @@ func TestApi_GetTokenDecimals(t *testing.T) {
 			fields: fields{
 				endpoint: "https://api.trongrid.io",
 				log:      logger,
-				provider: url.NewTrongridUrlProvider(),
+				provider: url.NewTrongridURLProvider(),
 			},
 			args: args{
 				token: "4118fd0626daf3af02389aef3ed87db9c33f638ffa",
@@ -39,7 +39,7 @@ func TestApi_GetTokenDecimals(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			a := &Api{
+			a := &API{
 				endpoint: tt.fields.endpoint,
 				log:      tt.fields.log,
 				provider: tt.fields.provider,

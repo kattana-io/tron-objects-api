@@ -2,45 +2,62 @@ package url
 
 import (
 	"bytes"
+	"context"
 	"fmt"
 	"net/http"
+	"time"
 )
 
-type ApiUrlProvider interface {
+type APIURLProvider interface {
 	Request(url string, body []byte) (*http.Response, error)
 	GetBlockByNum() string
-	GetTransactionInfoById() string
+	GetTransactionInfoByID() string
 	TriggerConstantContract() string
 	GetContractInfo() string
 }
 
-type NodeUrlProvider struct {
+type NodeURLProvider struct {
 	host string
 }
 
-func (n *NodeUrlProvider) GetContractInfo() string {
+func (n *NodeURLProvider) GetContractInfo() string {
 	return fmt.Sprintf("%s/wallet/getcontractinfo", n.host)
 }
 
-func (n *NodeUrlProvider) GetBlockByNum() string {
+func (n *NodeURLProvider) GetBlockByNum() string {
 	return fmt.Sprintf("%s/wallet/getblockbynum", n.host)
 }
 
-func (n *NodeUrlProvider) GetTransactionInfoById() string {
+func (n *NodeURLProvider) GetTransactionInfoByID() string {
 	return fmt.Sprintf("%s/wallet/gettransactioninfobyid", n.host)
 }
 
-func (n *NodeUrlProvider) TriggerConstantContract() string {
+func (n *NodeURLProvider) TriggerConstantContract() string {
 	return fmt.Sprintf("%s/wallet/triggerconstantcontract", n.host)
 }
 
-func (n *NodeUrlProvider) Request(url string, body []byte) (*http.Response, error) {
-	res, err := http.Post(url, "application/json", bytes.NewBuffer(body))
-	return res, err
+const maxTimeout = 30 * time.Second
+
+func (n *NodeURLProvider) Request(url string, body []byte) (*http.Response, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), maxTimeout)
+	defer cancel()
+
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(body))
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	client := http.DefaultClient
+	res, err := client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
 }
 
-func NewNodeUrlProvider(host string) ApiUrlProvider {
-	return &NodeUrlProvider{
+func NewNodeURLProvider(host string) APIURLProvider {
+	return &NodeURLProvider{
 		host: host,
 	}
 }

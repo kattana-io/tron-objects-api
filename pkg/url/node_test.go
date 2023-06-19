@@ -21,7 +21,7 @@ func TestNodeUrlProvider_TriggerConstantContract(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			n := &NodeUrlProvider{
+			n := &NodeURLProvider{
 				host: tt.fields.host,
 			}
 			if got := n.TriggerConstantContract(); got != tt.want {
