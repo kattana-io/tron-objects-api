@@ -6,13 +6,13 @@ import (
 )
 
 type Pair struct {
-	api     *api.Api
+	api     *api.API
 	address api.Address
 }
 
-func New(api *api.Api, address api.Address) *Pair {
+func New(impl *api.API, address api.Address) *Pair {
 	return &Pair{
-		api:     api,
+		api:     impl,
 		address: address,
 	}
 }

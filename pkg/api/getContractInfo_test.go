@@ -11,7 +11,7 @@ func TestApi_GetContractInfo(t *testing.T) {
 	type fields struct {
 		endpoint string
 		log      *zap.Logger
-		provider url.ApiUrlProvider
+		provider url.APIURLProvider
 	}
 	type args struct {
 		token *Address
@@ -28,7 +28,7 @@ func TestApi_GetContractInfo(t *testing.T) {
 			fields: fields{
 				endpoint: "https://api.trongrid.io",
 				log:      logger,
-				provider: url.NewTrongridUrlProvider(),
+				provider: url.NewTrongridURLProvider(),
 			},
 			args: args{
 				token: FromHex("41a2726afbecbd8e936000ed684cef5e2f5cf43008"),
@@ -41,7 +41,7 @@ func TestApi_GetContractInfo(t *testing.T) {
 			fields: fields{
 				endpoint: "https://api.trongrid.io",
 				log:      logger,
-				provider: url.NewTrongridUrlProvider(),
+				provider: url.NewTrongridURLProvider(),
 			},
 			args: args{
 				token: FromHex("412e12cbc3bacb0a80aef95b320773a7c64bc4372d"),
@@ -52,7 +52,7 @@ func TestApi_GetContractInfo(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			a := &Api{
+			a := &API{
 				endpoint: tt.fields.endpoint,
 				log:      tt.fields.log,
 				provider: tt.fields.provider,

@@ -42,7 +42,7 @@ type Transaction struct {
 					FrozenBalance   int    `json:"frozen_balance,omitempty"`
 					CallValue       int    `json:"call_value,omitempty"`
 				} `json:"value"`
-				TypeUrl string `json:"type_url"`
+				TypeURL string `json:"type_url"`
 			} `json:"parameter"`
 			Type string `json:"type"`
 		} `json:"contract"`
@@ -55,8 +55,8 @@ type Transaction struct {
 	RawDataHex string `json:"raw_data_hex"`
 }
 
-func (a *Api) GetBlockByNum(number int32) (*GetBlockByNumResp, error) {
-	postBody, _ := json.Marshal(map[string]interface{}{
+func (a *API) GetBlockByNum(number int32) (*GetBlockByNumResp, error) {
+	postBody, _ := json.Marshal(map[string]any{
 		"num": number,
 	})
 

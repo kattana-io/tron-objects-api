@@ -30,7 +30,7 @@ type TCCResponse struct {
 						OwnerAddress    string `json:"owner_address"`
 						ContractAddress string `json:"contract_address"`
 					} `json:"value"`
-					TypeUrl string `json:"type_url"`
+					TypeURL string `json:"type_url"`
 				} `json:"parameter"`
 				Type string `json:"type"`
 			} `json:"contract"`
@@ -44,8 +44,8 @@ type TCCResponse struct {
 }
 
 // TriggerConstantContract /**
-func (a *Api) TriggerConstantContract(contractAddress string, functionSelector string, parameter string) (*TCCResponse, error) {
-	postBody, _ := json.Marshal(map[string]interface{}{
+func (a *API) TriggerConstantContract(contractAddress, functionSelector, parameter string) (*TCCResponse, error) {
+	postBody, _ := json.Marshal(map[string]any{
 		"owner_address":     DummyCaller,
 		"contract_address":  contractAddress,
 		"function_selector": functionSelector,
@@ -70,8 +70,10 @@ func (a *Api) TriggerConstantContract(contractAddress string, functionSelector s
 	return &data, nil
 }
 
-func (a *Api) GetTokenDecimals(token string) (int32, error) {
-	postBody, _ := json.Marshal(map[string]interface{}{
+const defaultDecimals = 18
+
+func (a *API) GetTokenDecimals(token string) (int32, error) {
+	postBody, _ := json.Marshal(map[string]any{
 		"owner_address":     DummyCaller,
 		"contract_address":  token,
 		"function_selector": "decimals()",
@@ -80,7 +82,7 @@ func (a *Api) GetTokenDecimals(token string) (int32, error) {
 	res, err := a.provider.Request(a.provider.TriggerConstantContract(), postBody)
 	if err != nil {
 		a.log.Error(err.Error())
-		return 18, err
+		return defaultDecimals, err
 	}
 
 	defer res.Body.Close()
@@ -89,17 +91,18 @@ func (a *Api) GetTokenDecimals(token string) (int32, error) {
 	decoder := json.NewDecoder(res.Body)
 	err = decoder.Decode(&data)
 	if err != nil || len(data.ConstantResult) == 0 {
-		return 18, err
+		return defaultDecimals, err
 	}
 
 	result, err := strconv.ParseInt(TrimZeroes(data.ConstantResult[0]), 16, 16)
 	if err != nil {
-		return 18, err
+		return defaultDecimals, err
 	}
 	return int32(result), nil
 }
 
-func (a *Api) GetPairToken(pair string) (string, error) {
+//nolint:dupl
+func (a *API) GetPairToken(pair string) (string, error) {
 	postBody, _ := json.Marshal(map[string]interface{}{
 		"owner_address":     DummyCaller,
 		"contract_address":  pair,
@@ -122,7 +125,9 @@ func (a *Api) GetPairToken(pair string) (string, error) {
 
 	return TrimZeroes(data.ConstantResult[0]), nil
 }
-func (a *Api) GetToken0(pair string) (string, error) {
+
+//nolint:dupl
+func (a *API) GetToken0(pair string) (string, error) {
 	postBody, _ := json.Marshal(map[string]interface{}{
 		"owner_address":     DummyCaller,
 		"contract_address":  pair,
@@ -147,7 +152,8 @@ func (a *Api) GetToken0(pair string) (string, error) {
 	return TrimZeroes(data.ConstantResult[0]), nil
 }
 
-func (a *Api) GetToken1(pair string) (string, error) {
+//nolint:dupl
+func (a *API) GetToken1(pair string) (string, error) {
 	postBody, _ := json.Marshal(map[string]interface{}{
 		"owner_address":     DummyCaller,
 		"contract_address":  pair,
@@ -171,7 +177,7 @@ func (a *Api) GetToken1(pair string) (string, error) {
 	return TrimZeroes(data.ConstantResult[0]), nil
 }
 
-func (a *Api) GetTokenName(hexAddress string) (string, error) {
+func (a *API) GetTokenName(hexAddress string) (string, error) {
 	postBody, _ := json.Marshal(map[string]interface{}{
 		"owner_address":     DummyCaller,
 		"contract_address":  hexAddress,
@@ -203,7 +209,7 @@ func (a *Api) GetTokenName(hexAddress string) (string, error) {
 	return string(decodedData), nil
 }
 
-func (a *Api) GetTokenSymbol(hexAddress string) (string, error) {
+func (a *API) GetTokenSymbol(hexAddress string) (string, error) {
 	postBody, _ := json.Marshal(map[string]interface{}{
 		"owner_address":     DummyCaller,
 		"contract_address":  hexAddress,
@@ -211,6 +217,7 @@ func (a *Api) GetTokenSymbol(hexAddress string) (string, error) {
 	})
 	responseBody := bytes.NewBuffer(postBody)
 
+	//nolint:noctx
 	res, err := http.Post(a.provider.TriggerConstantContract(), "application/json", responseBody)
 	if err != nil {
 		a.log.Error(err.Error())
@@ -226,6 +233,9 @@ func (a *Api) GetTokenSymbol(hexAddress string) (string, error) {
 	}
 
 	decodedData, err := hexutil.Decode(fmt.Sprintf("0x%s", data.ConstantResult[0][128:]))
+	if err != nil {
+		return "", err
+	}
 	decodedData = bytes.TrimRight(decodedData, "\u0000")
 
 	return string(decodedData), nil

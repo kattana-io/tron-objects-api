@@ -5,15 +5,15 @@ import (
 	"go.uber.org/zap"
 )
 
-type Api struct {
+type API struct {
 	endpoint string
 	log      *zap.Logger
-	provider url.ApiUrlProvider
+	provider url.APIURLProvider
 }
 
-func NewApi(nodeUrl string, logger *zap.Logger, provider url.ApiUrlProvider) *Api {
-	return &Api{
-		endpoint: nodeUrl,
+func NewAPI(nodeURL string, logger *zap.Logger, provider url.APIURLProvider) *API {
+	return &API{
+		endpoint: nodeURL,
 		log:      logger,
 		provider: provider,
 	}

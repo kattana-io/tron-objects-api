@@ -8,7 +8,7 @@ import (
 
 func TestPair_Token0(t *testing.T) {
 	type fields struct {
-		api     *api.Api
+		api     *api.API
 		address api.Address
 	}
 	tests := []struct {
@@ -20,7 +20,7 @@ func TestPair_Token0(t *testing.T) {
 		{
 			name: "TRX/USDT",
 			fields: fields{
-				api:     api.NewApi("", nil, url.NewTrongridUrlProvider()),
+				api:     api.NewAPI("", nil, url.NewTrongridURLProvider()),
 				address: *api.FromBase58("TYA7DfE44XFsZEpBm7M2HAmEgU5kCtDDXg"),
 			},
 			want:    "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
@@ -29,7 +29,7 @@ func TestPair_Token0(t *testing.T) {
 		{
 			name: "TRX/USDT",
 			fields: fields{
-				api:     api.NewApi("", nil, url.NewTrongridUrlProvider()),
+				api:     api.NewAPI("", nil, url.NewTrongridURLProvider()),
 				address: *api.FromBase58("TYA7DfE44XFsZEpBm7M2HAmEgU5kCtDDXg"),
 			},
 			want:    "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
@@ -38,7 +38,7 @@ func TestPair_Token0(t *testing.T) {
 		{
 			name: "PROS/TRX",
 			fields: fields{
-				api:     api.NewApi("", nil, url.NewTrongridUrlProvider()),
+				api:     api.NewAPI("", nil, url.NewTrongridURLProvider()),
 				address: *api.FromBase58("TA7hPWMWPWoadfFKWpTAdPYVZd3SNdtBDE"),
 			},
 			want:    "TFf1aBoNFqxN32V2NQdvNrXVyYCy9qY8p1",
@@ -47,7 +47,7 @@ func TestPair_Token0(t *testing.T) {
 		{
 			name: "(Not a justmoney pair) AOT/TRX",
 			fields: fields{
-				api:     api.NewApi("", nil, url.NewTrongridUrlProvider()),
+				api:     api.NewAPI("", nil, url.NewTrongridURLProvider()),
 				address: *api.FromBase58("TUer6gnscMcEX8Pid2FtwBCCS4coKRCrtL"),
 			},
 			want:    "1111",
@@ -74,7 +74,7 @@ func TestPair_Token0(t *testing.T) {
 
 func TestPair_Token1(t *testing.T) {
 	type fields struct {
-		api     *api.Api
+		api     *api.API
 		address api.Address
 	}
 	tests := []struct {
@@ -86,7 +86,7 @@ func TestPair_Token1(t *testing.T) {
 		{
 			name: "TRX/USDT",
 			fields: fields{
-				api:     api.NewApi("", nil, url.NewTrongridUrlProvider()),
+				api:     api.NewAPI("", nil, url.NewTrongridURLProvider()),
 				address: *api.FromBase58("TYA7DfE44XFsZEpBm7M2HAmEgU5kCtDDXg"),
 			},
 			want:    "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",

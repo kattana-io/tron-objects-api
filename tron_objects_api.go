@@ -1,3 +1,4 @@
+//nolint:stylecheck
 package tron_objects_api
 
 import (
@@ -9,6 +10,7 @@ import (
 	_ "github.com/kattana-io/tron-objects-api/pkg/url"
 )
 
+//nolint:unused
 func main() {
 	fmt.Println("Success")
 }

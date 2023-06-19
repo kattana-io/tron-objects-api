@@ -8,7 +8,7 @@ import (
 
 func TestToken_GetDecimals(t1 *testing.T) {
 	type fields struct {
-		api     *api.Api
+		api     *api.API
 		address *api.Address
 	}
 	tests := []struct {
@@ -20,7 +20,7 @@ func TestToken_GetDecimals(t1 *testing.T) {
 		{
 			name: "USDT Decimals",
 			fields: fields{
-				api:     api.NewApi("", nil, url.NewTrongridUrlProvider()),
+				api:     api.NewAPI("", nil, url.NewTrongridURLProvider()),
 				address: api.FromBase58("TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t"),
 			},
 			want:    6,
@@ -29,7 +29,7 @@ func TestToken_GetDecimals(t1 *testing.T) {
 		{
 			name: "YBT Decimals",
 			fields: fields{
-				api:     api.NewApi("", nil, url.NewTrongridUrlProvider()),
+				api:     api.NewAPI("", nil, url.NewTrongridURLProvider()),
 				address: api.FromBase58("TPGx2NszcNRvSDiDM3c1YXM5XSvcRwrHLP"),
 			},
 			want:    6,
@@ -38,7 +38,7 @@ func TestToken_GetDecimals(t1 *testing.T) {
 		{
 			name: "Tiger Decimals",
 			fields: fields{
-				api:     api.NewApi("", nil, url.NewTrongridUrlProvider()),
+				api:     api.NewAPI("", nil, url.NewTrongridURLProvider()),
 				address: api.FromBase58("TQW9R6Ps1bXDJbTND6nTT5C5z2jDSbTDm8"),
 			},
 			want:    6,
@@ -47,7 +47,7 @@ func TestToken_GetDecimals(t1 *testing.T) {
 		{
 			name: "Tiger Decimals",
 			fields: fields{
-				api:     api.NewApi("", nil, url.NewTrongridUrlProvider()),
+				api:     api.NewAPI("", nil, url.NewTrongridURLProvider()),
 				address: api.FromBase58("TQW9R6Ps1bXDJbTND6nTT5C5z2jDSbTDm8"),
 			},
 			want:    6,
@@ -56,7 +56,7 @@ func TestToken_GetDecimals(t1 *testing.T) {
 		{
 			name: "ZSTokenName (ZS) Decimals",
 			fields: fields{
-				api:     api.NewApi("", nil, url.NewTrongridUrlProvider()),
+				api:     api.NewAPI("", nil, url.NewTrongridURLProvider()),
 				address: api.FromBase58("TMTc7Z9zG9oRTUN6Yhmb7kGa6PCJmV2GhE"),
 			},
 			want:    6,
@@ -81,9 +81,10 @@ func TestToken_GetDecimals(t1 *testing.T) {
 	}
 }
 
+//nolint:dupl
 func TestToken_GetName(t1 *testing.T) {
 	type fields struct {
-		api     *api.Api
+		api     *api.API
 		address *api.Address
 	}
 	tests := []struct {
@@ -95,7 +96,7 @@ func TestToken_GetName(t1 *testing.T) {
 		{
 			name: "USDT",
 			fields: fields{
-				api:     api.NewApi("", nil, url.NewTrongridUrlProvider()),
+				api:     api.NewAPI("", nil, url.NewTrongridURLProvider()),
 				address: api.FromBase58("TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t"),
 			},
 			want:    "USDT",
@@ -120,9 +121,10 @@ func TestToken_GetName(t1 *testing.T) {
 	}
 }
 
+//nolint:dupl
 func TestToken_GetSymbol(t1 *testing.T) {
 	type fields struct {
-		api     *api.Api
+		api     *api.API
 		address *api.Address
 	}
 	tests := []struct {
@@ -134,7 +136,7 @@ func TestToken_GetSymbol(t1 *testing.T) {
 		{
 			name: "USDT",
 			fields: fields{
-				api:     api.NewApi("", nil, url.NewTrongridUrlProvider()),
+				api:     api.NewAPI("", nil, url.NewTrongridURLProvider()),
 				address: api.FromBase58("TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t"),
 			},
 			want:    "USDT",

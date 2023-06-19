@@ -14,8 +14,8 @@ type ContractInfoResponse struct {
 	} `json:"smart_contract"`
 }
 
-func (a *Api) GetContractInfo(token *Address) (ContractInfoResponse, error) {
-	postBody, _ := json.Marshal(map[string]interface{}{
+func (a *API) GetContractInfo(token *Address) (ContractInfoResponse, error) {
+	postBody, _ := json.Marshal(map[string]any{
 		"value":   token.ToHex(),
 		"visible": "false",
 	})

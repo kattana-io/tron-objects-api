@@ -5,19 +5,21 @@ import (
 )
 
 type Token struct {
-	api     *api.Api
+	api     *api.API
 	address *api.Address
 }
 
-func New(api *api.Api, address *api.Address) *Token {
+func New(imp *api.API, address *api.Address) *Token {
 	return &Token{
-		api:     api,
+		api:     imp,
 		address: address,
 	}
 }
 
+const maxRetry = 5
+
 func (t *Token) TryToGetDecimals(try int64) (int32, bool) {
-	if try > 5 {
+	if try > maxRetry {
 		return 0, false
 	}
 
