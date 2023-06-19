@@ -13,6 +13,7 @@ type Pair struct {
 	address api.Address
 }
 
+//nolint:lll
 const getReservesAbi = `[{"constant":true,"inputs":[],"name":"getReserves","outputs":[{"internalType":"uint112","name":"_reserve0","type":"uint112"},{"internalType":"uint112","name":"_reserve1","type":"uint112"},{"internalType":"uint32","name":"_blockTimestampLast","type":"uint32"}],"payable":false,"stateMutability":"view","type":"function"}]`
 
 func New(impl *api.API, address api.Address) *Pair {
@@ -33,7 +34,7 @@ func (s *Pair) GetTokenAddress() (*api.Address, error) {
 	return api.FromHex(res), nil
 }
 
-func (s *Pair) GetReserves() (*big.Int, *big.Int, error) {
+func (s *Pair) GetReserves() (resA, resB *big.Int, err error) {
 	res, err := s.api.GetPairReserves(s.address.ToHex())
 	if err != nil {
 		return nil, nil, err
