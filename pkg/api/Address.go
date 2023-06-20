@@ -3,7 +3,9 @@ package api
 import (
 	"crypto/sha256"
 	"encoding/hex"
+	goTron "github.com/0x10f/go-tron/address"
 	"github.com/shengdoushi/base58"
+	"strings"
 )
 
 type Address struct {
@@ -83,10 +85,30 @@ func (a *Address) ToHex() string {
 	return hex.EncodeToString(a.bytes)[:42]
 }
 
+func (a *Address) PackIntoEthWord() (result string) {
+	str := strings.ReplaceAll(a.ToHex(), "41", "00")
+	content := len(str)
+	pre := 64 - content
+	for i := 0; i < pre; i++ {
+		result += "0"
+	}
+	result += str
+	return result
+}
+
+func (a *Address) PackIntoEthBytes() []byte {
+	str := strings.ReplaceAll(a.ToHex(), "41", "00")
+	return []byte(str)
+}
+
 func (a *Address) GetBytes() []byte {
 	return a.bytes
 }
 
 func (a *Address) GetStatus() bool {
 	return a.ok
+}
+
+func (a *Address) ToGoTronAddress() (goTron.Address, error) {
+	return goTron.FromBase58(a.ToBase58())
 }
