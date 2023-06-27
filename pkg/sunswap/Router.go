@@ -32,7 +32,7 @@ func NewRouter(impl *api.API) *Router {
 	}
 }
 
-func (r *Router) swapETHToToken(token api.Address, amountOutMin *big.Int, to api.Address, deadline *big.Int) ([]byte, error) {
+func (r *Router) SwapETHToToken(token api.Address, amountOutMin *big.Int, to api.Address, deadline *big.Int) ([]byte, error) {
 	f := r.abi.Functions["swapExactETHForTokens"]
 	WTRX, err := api.FromBase58(WTRXBase58).ToGoTronAddress()
 	if err != nil {
