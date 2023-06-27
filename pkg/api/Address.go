@@ -3,7 +3,7 @@ package api
 import (
 	"crypto/sha256"
 	"encoding/hex"
-	goTron "github.com/0x10f/go-tron/address"
+	goTron "github.com/kattana-io/go-tron/address"
 	"github.com/shengdoushi/base58"
 	"strings"
 )

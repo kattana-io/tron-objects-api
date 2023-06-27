@@ -1,8 +1,8 @@
 package sunswap
 
 import (
-	tronAbi "github.com/0x10f/go-tron/abi"
 	"github.com/ethereum/go-ethereum/common/hexutil"
+	tronAbi "github.com/kattana-io/go-tron/abi"
 	"github.com/kattana-io/tron-objects-api/pkg/api"
 )
 
