@@ -32,8 +32,14 @@ func NewFactory(impl *api.API) *Factory {
 }
 
 func (f *Factory) GetPair(tokenIn, tokenOut *api.Address) (*api.Address, error) {
-	addrA, _ := tokenIn.ToGoTronAddress()
-	addrB, _ := tokenOut.ToGoTronAddress()
+	addrA, err := tokenIn.ToGoTronAddress()
+	if err != nil {
+		return nil, err
+	}
+	addrB, err := tokenOut.ToGoTronAddress()
+	if err != nil {
+		return nil, err
+	}
 	bts := f.abi.Functions["getPair"].Encode(addrA, addrB)
 	pair, err := f.api.GetFactoryPair(f.address, api.FromHex(factoryOwner), hexutil.Encode(bts)[2:])
 	if err != nil {
