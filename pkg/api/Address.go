@@ -85,17 +85,6 @@ func (a *Address) ToHex() string {
 	return hex.EncodeToString(a.bytes)[:42]
 }
 
-func (a *Address) PackIntoEthWord() (result string) {
-	str := strings.ReplaceAll(a.ToHex(), "41", "00")
-	content := len(str)
-	pre := 64 - content
-	for i := 0; i < pre; i++ {
-		result += "0"
-	}
-	result += str
-	return result
-}
-
 func (a *Address) PackIntoEthBytes() []byte {
 	str := strings.ReplaceAll(a.ToHex(), "41", "00")
 	return []byte(str)
