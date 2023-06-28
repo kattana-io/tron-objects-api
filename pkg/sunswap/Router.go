@@ -35,7 +35,9 @@ func NewRouter(impl *api.API) *Router {
 func (r *Router) ContractAddress() string {
 	return sunswapV2RouterAddress
 }
-func (r *Router) SwapETHToToken(token api.Address, amountOutMin *big.Int, to api.Address, deadline *big.Int) ([]byte, string, error) {
+
+//nolint:gocritic
+func (r *Router) SwapETHToTokens(token api.Address, amountOutMin *big.Int, to api.Address, deadline *big.Int) ([]byte, string, error) {
 	const selector = "swapExactETHForTokens(uint256,address[],address,uint256)"
 	f := r.abi.Functions["swapExactETHForTokens"]
 	WTRX, err := api.FromBase58(WTRXBase58).ToGoTronAddress()
@@ -52,4 +54,44 @@ func (r *Router) SwapETHToToken(token api.Address, amountOutMin *big.Int, to api
 	}
 	path := []tronAddress.Address{WTRX, tokenAddr}
 	return f.Encode(amountOutMin, path, toAddr, deadline), selector, nil
+}
+
+//nolint:gocritic,lll
+func (r *Router) SwapTokensToTokens(tokenFrom, tokenTo api.Address, amountIn, amountOutMin *big.Int, to api.Address, deadline *big.Int) ([]byte, string, error) {
+	const selector = "swapExactTokensForTokens(uint256,uint256,address[],address,uint256)"
+	f := r.abi.Functions["swapExactTokensForTokens"]
+	tokenSrc, err := tokenFrom.ToGoTronAddress()
+	if err != nil {
+		return []byte{}, selector, nil
+	}
+	tokenDst, err := tokenTo.ToGoTronAddress()
+	if err != nil {
+		return []byte{}, selector, nil
+	}
+	toAddr, err := to.ToGoTronAddress()
+	if err != nil {
+		return []byte{}, selector, err
+	}
+	path := []tronAddress.Address{tokenSrc, tokenDst}
+	return f.Encode(amountIn, amountOutMin, path, toAddr, deadline), selector, nil
+}
+
+//nolint:gocritic,lll
+func (r *Router) SwapTokensToETH(token api.Address, amountIn, amountOutMin *big.Int, to api.Address, deadline *big.Int) ([]byte, string, error) {
+	const selector = "swapExactTokensForETH(uint256,uint256,address[],address,uint256)"
+	f := r.abi.Functions["swapExactTokensForETH"]
+	WTRX, err := api.FromBase58(WTRXBase58).ToGoTronAddress()
+	if err != nil {
+		return []byte{}, selector, nil
+	}
+	tokenAddr, err := token.ToGoTronAddress()
+	if err != nil {
+		return []byte{}, selector, nil
+	}
+	toAddr, err := to.ToGoTronAddress()
+	if err != nil {
+		return []byte{}, selector, err
+	}
+	path := []tronAddress.Address{tokenAddr, WTRX}
+	return f.Encode(amountIn, amountOutMin, path, toAddr, deadline), selector, nil
 }

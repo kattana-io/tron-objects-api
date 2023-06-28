@@ -40,7 +40,7 @@ func TestRouter_swapETHToToken(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			impl := api.NewAPI("", nil, url.NewTrongridURLProvider())
 			r := NewRouter(impl)
-			got, _, err := r.SwapETHToToken(tt.args.token, tt.args.amountOutMin, tt.args.to, tt.args.deadline)
+			got, _, err := r.SwapETHToTokens(tt.args.token, tt.args.amountOutMin, tt.args.to, tt.args.deadline)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("swapETHToToken() error = %v, wantErr %v", err, tt.wantErr)
 				return

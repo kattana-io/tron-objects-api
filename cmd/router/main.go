@@ -18,18 +18,15 @@ const (
 )
 
 func main() {
-	// Create acc
-	//src, err := account.FromPrivateKeyHex(srcPrivKey)
-	//if err != nil {
-	//	log.Fatal("Failed to parse private key hex - ", err)
-	//}
 	impl := api.NewAPI("", nil, url.NewTrongridURLProvider())
 	r := sunswap.NewRouter(impl)
-	//
-	bts, selector, err := r.SwapETHToToken(*api.FromBase58(usdt), big.NewInt(10^18), *api.FromBase58(ZeroAddress), big.NewInt(time.Now().Add(time.Minute).Unix()))
+	//nolint:gomnd
+	OneTrx, _ := big.NewInt(0).SetString("1000000000000000000", 10)
+	//nolint:lll
+	bts, selector, err := r.SwapETHToTokens(*api.FromBase58(usdt), OneTrx, *api.FromBase58(ZeroAddress), big.NewInt(time.Now().Add(time.Minute).Unix()))
 	if err != nil {
 		log.Fatal(err)
 	}
-	tx, err := impl.TriggerSmartContract(r.ContractAddress(), selector, hexutil.Encode(bts)[2:], big.NewInt(0), big.NewInt(0))
+	tx, _ := impl.TriggerSmartContract(r.ContractAddress(), selector, hexutil.Encode(bts)[2:], big.NewInt(0), big.NewInt(0))
 	fmt.Println(tx)
 }

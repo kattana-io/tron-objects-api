@@ -20,7 +20,7 @@ type TSMResponse struct {
 						OwnerAddress    string `json:"owner_address"`
 						ContractAddress string `json:"contract_address"`
 					} `json:"value"`
-					TypeUrl string `json:"type_url"`
+					TypeURL string `json:"type_url"`
 				} `json:"parameter"`
 				Type string `json:"type"`
 			} `json:"contract"`
@@ -34,11 +34,11 @@ type TSMResponse struct {
 }
 
 // TriggerSmartContract - returns an unsigned transaction /**
-func (a *API) TriggerSmartContract(contractAddress, functionSelector, parameter string, feeLimit *big.Int, callValue *big.Int) (*TSMResponse, error) {
+func (a *API) TriggerSmartContract(contract, selector, parameter string, feeLimit, callValue *big.Int) (*TSMResponse, error) {
 	input := map[string]any{
-		"owner_address":     contractAddress,
-		"contract_address":  contractAddress,
-		"function_selector": functionSelector,
+		"owner_address":     contract,
+		"contract_address":  contract,
+		"function_selector": selector,
 		"parameter":         parameter,
 		"fee_limit":         feeLimit,
 		"call_value":        callValue,
