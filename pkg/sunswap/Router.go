@@ -32,20 +32,24 @@ func NewRouter(impl *api.API) *Router {
 	}
 }
 
-func (r *Router) SwapETHToToken(token api.Address, amountOutMin *big.Int, to api.Address, deadline *big.Int) ([]byte, error) {
+func (r *Router) ContractAddress() string {
+	return sunswapV2RouterAddress
+}
+func (r *Router) SwapETHToToken(token api.Address, amountOutMin *big.Int, to api.Address, deadline *big.Int) ([]byte, string, error) {
+	const selector = "swapExactETHForTokens(uint256,address[],address,uint256)"
 	f := r.abi.Functions["swapExactETHForTokens"]
 	WTRX, err := api.FromBase58(WTRXBase58).ToGoTronAddress()
 	if err != nil {
-		return []byte{}, err
+		return []byte{}, selector, nil
 	}
 	tokenAddr, err := token.ToGoTronAddress()
 	if err != nil {
-		return []byte{}, err
+		return []byte{}, selector, nil
 	}
 	toAddr, err := to.ToGoTronAddress()
 	if err != nil {
-		return []byte{}, err
+		return []byte{}, selector, err
 	}
 	path := []tronAddress.Address{WTRX, tokenAddr}
-	return f.Encode(amountOutMin, path, toAddr, deadline), nil
+	return f.Encode(amountOutMin, path, toAddr, deadline), selector, nil
 }
