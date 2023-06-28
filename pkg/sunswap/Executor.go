@@ -24,7 +24,7 @@ func CanSell(tokenIn, tokenOut *api.Address, amountIn *big.Int) (bool, error) {
 		return false, err
 	}
 	if flipped {
-		return resB.Cmp(amountIn) == +1, nil
+		return resB.Cmp(amountIn) > 0, nil
 	}
-	return resA.Cmp(amountIn) == +1, nil
+	return resA.Cmp(amountIn) > 0, nil
 }
