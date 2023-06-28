@@ -5,7 +5,6 @@ import (
 	"encoding/hex"
 	goTron "github.com/kattana-io/go-tron/address"
 	"github.com/shengdoushi/base58"
-	"strings"
 )
 
 type Address struct {
@@ -83,11 +82,6 @@ func (a *Address) ToBase58() string {
 // ToHex - we need to receive string with 41 prefix
 func (a *Address) ToHex() string {
 	return hex.EncodeToString(a.bytes)[:42]
-}
-
-func (a *Address) PackIntoEthBytes() []byte {
-	str := strings.ReplaceAll(a.ToHex(), "41", "00")
-	return []byte(str)
 }
 
 func (a *Address) GetBytes() []byte {
