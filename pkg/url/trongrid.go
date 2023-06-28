@@ -57,3 +57,7 @@ func (n *TrongridURLProvider) TriggerConstantContract() string {
 func (n *TrongridURLProvider) GetContractInfo() string {
 	return trongridHost + "/wallet/getcontractinfo"
 }
+
+func (n *TrongridURLProvider) TriggerSmartContract() string {
+	return trongridHost + "/wallet/triggersmartcontract"
+}

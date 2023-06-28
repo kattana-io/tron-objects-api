@@ -3,6 +3,7 @@ package api
 import (
 	"crypto/sha256"
 	"encoding/hex"
+	goTron "github.com/kattana-io/go-tron/address"
 	"github.com/shengdoushi/base58"
 )
 
@@ -89,4 +90,8 @@ func (a *Address) GetBytes() []byte {
 
 func (a *Address) GetStatus() bool {
 	return a.ok
+}
+
+func (a *Address) ToGoTronAddress() (goTron.Address, error) {
+	return goTron.FromBase58(a.ToBase58())
 }

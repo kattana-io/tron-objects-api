@@ -2,9 +2,10 @@ package api
 
 import (
 	"bytes"
-	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/ethereum/go-ethereum/common/hexutil"
+	"github.com/goccy/go-json"
 	"strconv"
 )
 
@@ -151,6 +152,26 @@ func (a *API) GetPairReserves(pair string) (string, error) {
 	}
 
 	return data.ConstantResult[0], nil
+}
+
+func (a *API) GetFactoryPair(factory, factoryOwner *Address, parameter string) (*Address, error) {
+	input := map[string]any{
+		"contract_address":  factory.ToHex(),
+		"owner_address":     factoryOwner.ToHex(),
+		"function_selector": "getPair(address,address)",
+		"parameter":         parameter,
+		"call_value":        0,
+	}
+	data, err := a.TCCRequest(input)
+	if err != nil {
+		return FromHex("0x0"), err
+	}
+
+	if data.ConstantResult == nil {
+		return nil, errors.New("invalid result")
+	}
+
+	return FromHex(TrimZeroes(data.ConstantResult[0])), nil
 }
 
 func (a *API) GetTokenName(hexAddress string) (string, error) {
