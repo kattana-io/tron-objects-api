@@ -42,6 +42,10 @@ func (n *TrongridURLProvider) Request(url string, body []byte) (resp *http.Respo
 	return resp, err
 }
 
+func (n *TrongridURLProvider) GetTransactionInfoByBlockNum() string {
+	return trongridHost + "/wallet/gettransactioninfobyblocknum"
+}
+
 func (n *TrongridURLProvider) GetBlockByNum() string {
 	return trongridHost + "/wallet/getblockbynum"
 }
