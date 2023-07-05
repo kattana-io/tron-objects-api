@@ -12,6 +12,7 @@ type APIURLProvider interface {
 	Request(url string, body []byte) (*http.Response, error)
 	GetBlockByNum() string
 	GetTransactionInfoByID() string
+	GetTransactionInfoByBlockNum() string
 	TriggerConstantContract() string
 	TriggerSmartContract() string
 	GetContractInfo() string
@@ -39,6 +40,10 @@ func (n *NodeURLProvider) GetTransactionInfoByID() string {
 
 func (n *NodeURLProvider) TriggerConstantContract() string {
 	return fmt.Sprintf("%s/wallet/triggerconstantcontract", n.host)
+}
+
+func (n *NodeURLProvider) GetTransactionInfoByBlockNum() string {
+	return fmt.Sprintf("%s/wallet/gettransactioninfobyblocknum", n.host)
 }
 
 const maxTimeout = 30 * time.Second
