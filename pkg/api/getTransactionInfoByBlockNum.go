@@ -28,14 +28,14 @@ type Receipt struct {
 	OriginEnergyUsage  int    `json:"origin_energy_usage"`
 }
 
-func (a *API) GetTransactionInfoByBlockNum(id string) (*GetTransactionInfoByBlockNumResp, error) {
+func (a *API) GetTransactionInfoByBlockNum(blockNumber int64) (*GetTransactionInfoByBlockNumResp, error) {
 	postBody, _ := json.Marshal(map[string]any{
-		"value": id,
+		"num": blockNumber,
 	})
 
 	res, err := a.provider.Request(a.provider.GetTransactionInfoByBlockNum(), postBody)
 	if err != nil {
-		a.log.Warn("Could not load tx: " + id)
+		a.log.Sugar().Warnf("Could not load tx: %v", blockNumber)
 		a.log.Error(err.Error())
 		return &GetTransactionInfoByBlockNumResp{}, err
 	}
@@ -46,7 +46,7 @@ func (a *API) GetTransactionInfoByBlockNum(id string) (*GetTransactionInfoByBloc
 	decoder := json.NewDecoder(res.Body)
 	err = decoder.Decode(&data)
 	if err != nil {
-		a.log.Warn("Could not load txs: " + id)
+		a.log.Sugar().Warnf("Could not load txs: %v", blockNumber)
 		return &GetTransactionInfoByBlockNumResp{}, err
 	}
 
