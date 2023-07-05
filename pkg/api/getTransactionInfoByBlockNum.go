@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 )
 
-type GetTransactionInfoByBlockNumResp = []GetTransactionInfoByBlockNumData
+type GetTransactionInfoByBlockNumResp = []*GetTransactionInfoByBlockNumData
 
 type GetTransactionInfoByBlockNumData struct {
 	Log             []Log    `json:"log,omitempty"`
@@ -28,7 +28,7 @@ type Receipt struct {
 	OriginEnergyUsage  int    `json:"origin_energy_usage"`
 }
 
-func (a *API) GetTransactionInfoByBlockNum(blockNumber int64) (*GetTransactionInfoByBlockNumResp, error) {
+func (a *API) GetTransactionInfoByBlockNum(blockNumber int64) (GetTransactionInfoByBlockNumResp, error) {
 	postBody, _ := json.Marshal(map[string]any{
 		"num": blockNumber,
 	})
@@ -37,7 +37,7 @@ func (a *API) GetTransactionInfoByBlockNum(blockNumber int64) (*GetTransactionIn
 	if err != nil {
 		a.log.Sugar().Warnf("Could not load tx: %v", blockNumber)
 		a.log.Error(err.Error())
-		return &GetTransactionInfoByBlockNumResp{}, err
+		return GetTransactionInfoByBlockNumResp{}, err
 	}
 
 	var data GetTransactionInfoByBlockNumResp
@@ -45,8 +45,8 @@ func (a *API) GetTransactionInfoByBlockNum(blockNumber int64) (*GetTransactionIn
 
 	if err2 != nil {
 		a.log.Sugar().Warnf("Could not load txs: %v", blockNumber)
-		return &GetTransactionInfoByBlockNumResp{}, err
+		return GetTransactionInfoByBlockNumResp{}, err
 	}
 
-	return &data, nil
+	return data, nil
 }
