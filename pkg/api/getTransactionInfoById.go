@@ -34,19 +34,16 @@ func (a *API) GetTransactionInfoByID(id string) (*GetTransactionInfoByIDResp, er
 		"value": id,
 	})
 
-	res, err := a.provider.Request(a.provider.GetTransactionInfoByID(), postBody)
+	body, err := a.provider.Request(a.provider.GetTransactionInfoByID(), postBody)
 	if err != nil {
 		a.log.Warn("Could not load tx: " + id)
 		a.log.Error(err.Error())
 		return &GetTransactionInfoByIDResp{}, err
 	}
 
-	defer res.Body.Close()
-
 	var data GetTransactionInfoByIDResp
-	decoder := json.NewDecoder(res.Body)
-	err = decoder.Decode(&data)
-	if err != nil {
+	err2 := json.Unmarshal(body, &data)
+	if err2 != nil {
 		a.log.Warn("Could not load tx: " + id)
 		return &GetTransactionInfoByIDResp{}, err
 	}

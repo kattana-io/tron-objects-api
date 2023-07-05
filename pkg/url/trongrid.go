@@ -3,6 +3,7 @@ package url
 import (
 	"bytes"
 	"context"
+	"io"
 	"net/http"
 	"os"
 )
@@ -23,7 +24,7 @@ type TrongridURLProvider struct {
 }
 
 // Request - Add headers to request https://developers.tron.network/reference/api-key#how-to-use-api-keys
-func (n *TrongridURLProvider) Request(url string, body []byte) (resp *http.Response, err error) {
+func (n *TrongridURLProvider) Request(url string, body []byte) (resBody []byte, err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), maxTimeout)
 	defer cancel()
 
@@ -37,9 +38,17 @@ func (n *TrongridURLProvider) Request(url string, body []byte) (resp *http.Respo
 	req.Header.Add("Content-Type", "application/json")
 	req = req.WithContext(ctx)
 	client := http.DefaultClient
-	resp, err = client.Do(req)
+	resp, err := client.Do(req)
 
-	return resp, err
+	if err != nil {
+		return nil, err
+	}
+
+	defer resp.Body.Close()
+
+	resBody, err2 := io.ReadAll(resp.Body)
+
+	return resBody, err2
 }
 
 func (n *TrongridURLProvider) GetTransactionInfoByBlockNum() string {

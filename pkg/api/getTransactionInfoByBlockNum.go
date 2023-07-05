@@ -33,19 +33,17 @@ func (a *API) GetTransactionInfoByBlockNum(blockNumber int64) (*GetTransactionIn
 		"num": blockNumber,
 	})
 
-	res, err := a.provider.Request(a.provider.GetTransactionInfoByBlockNum(), postBody)
+	body, err := a.provider.Request(a.provider.GetTransactionInfoByBlockNum(), postBody)
 	if err != nil {
 		a.log.Sugar().Warnf("Could not load tx: %v", blockNumber)
 		a.log.Error(err.Error())
 		return &GetTransactionInfoByBlockNumResp{}, err
 	}
 
-	defer res.Body.Close()
-
 	var data GetTransactionInfoByBlockNumResp
-	decoder := json.NewDecoder(res.Body)
-	err = decoder.Decode(&data)
-	if err != nil {
+	err2 := json.Unmarshal(body, &data)
+
+	if err2 != nil {
 		a.log.Sugar().Warnf("Could not load txs: %v", blockNumber)
 		return &GetTransactionInfoByBlockNumResp{}, err
 	}

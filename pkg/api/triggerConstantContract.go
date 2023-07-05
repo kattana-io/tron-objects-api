@@ -4,9 +4,10 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"strconv"
+
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/goccy/go-json"
-	"strconv"
 )
 
 const DummyCaller = "410000000000000000000000000000000000000000"
@@ -52,16 +53,14 @@ func (a *API) TCCRequest(input map[string]any) (*TCCResponse, error) {
 
 	var result TCCResponse
 
-	res, err := a.provider.Request(a.provider.TriggerConstantContract(), postBody)
+	body, err := a.provider.Request(a.provider.TriggerConstantContract(), postBody)
 	if err != nil {
 		a.log.Error(err.Error())
 		return &TCCResponse{}, err
 	}
-	defer res.Body.Close()
 
-	decoder := json.NewDecoder(res.Body)
-	err = decoder.Decode(&result)
-	if err != nil {
+	err2 := json.Unmarshal(body, &result)
+	if err2 != nil {
 		return &result, err
 	}
 

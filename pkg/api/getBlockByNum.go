@@ -60,17 +60,16 @@ func (a *API) GetBlockByNum(number int32) (*GetBlockByNumResp, error) {
 		"num": number,
 	})
 
-	res, err := a.provider.Request(a.provider.GetBlockByNum(), postBody)
+	body, err := a.provider.Request(a.provider.GetBlockByNum(), postBody)
 	if err != nil {
 		a.log.Error(err.Error())
 		return &GetBlockByNumResp{}, err
 	}
-	defer res.Body.Close()
 
 	var data GetBlockByNumResp
-	decoder := json.NewDecoder(res.Body)
-	err = decoder.Decode(&data)
-	if err != nil {
+	err2 := json.Unmarshal(body, &data)
+
+	if err2 != nil {
 		return &GetBlockByNumResp{}, err
 	}
 

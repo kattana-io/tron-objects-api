@@ -20,18 +20,15 @@ func (a *API) GetContractInfo(token *Address) (ContractInfoResponse, error) {
 		"visible": "false",
 	})
 
-	res, err := a.provider.Request(a.provider.GetContractInfo(), postBody)
+	body, err := a.provider.Request(a.provider.GetContractInfo(), postBody)
 	if err != nil {
 		a.log.Error(err.Error())
 		return ContractInfoResponse{}, err
 	}
 
-	defer res.Body.Close()
-
 	var data ContractInfoResponse
-	decoder := json.NewDecoder(res.Body)
-	err = decoder.Decode(&data)
-	if err != nil {
+	err2 := json.Unmarshal(body, &data)
+	if err2 != nil {
 		return ContractInfoResponse{}, err
 	}
 

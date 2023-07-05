@@ -4,12 +4,13 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"io"
 	"net/http"
 	"time"
 )
 
 type APIURLProvider interface {
-	Request(url string, body []byte) (*http.Response, error)
+	Request(url string, body []byte) ([]byte, error)
 	GetBlockByNum() string
 	GetTransactionInfoByID() string
 	GetTransactionInfoByBlockNum() string
@@ -48,7 +49,7 @@ func (n *NodeURLProvider) GetTransactionInfoByBlockNum() string {
 
 const maxTimeout = 30 * time.Second
 
-func (n *NodeURLProvider) Request(url string, body []byte) (*http.Response, error) {
+func (n *NodeURLProvider) Request(url string, body []byte) ([]byte, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), maxTimeout)
 	defer cancel()
 
@@ -62,8 +63,11 @@ func (n *NodeURLProvider) Request(url string, body []byte) (*http.Response, erro
 	if err != nil {
 		return nil, err
 	}
+	defer res.Body.Close()
 
-	return res, nil
+	resBody, err2 := io.ReadAll(res.Body)
+
+	return resBody, err2
 }
 
 func NewNodeURLProvider(host string) APIURLProvider {

@@ -1,8 +1,9 @@
 package api
 
 import (
-	"github.com/goccy/go-json"
 	"math/big"
+
+	"github.com/goccy/go-json"
 )
 
 type TSMResponse struct {
@@ -52,16 +53,14 @@ func (a *API) TriggerSmartContract(contract, selector, parameter string, feeLimi
 
 	var result TSMResponse
 
-	res, err := a.provider.Request(a.provider.TriggerSmartContract(), postBody)
+	body, err := a.provider.Request(a.provider.TriggerSmartContract(), postBody)
 	if err != nil {
 		a.log.Error(err.Error())
 		return &result, err
 	}
-	defer res.Body.Close()
 
-	decoder := json.NewDecoder(res.Body)
-	err = decoder.Decode(&result)
-	if err != nil {
+	err2 := json.Unmarshal(body, &result)
+	if err2 != nil {
 		return &result, err
 	}
 
