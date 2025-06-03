@@ -3,9 +3,10 @@ package main
 import (
 	"fmt"
 	"github.com/ethereum/go-ethereum/common/hexutil"
-	"github.com/kattana-io/tron-objects-api/pkg/api"
-	"github.com/kattana-io/tron-objects-api/pkg/sunswap"
-	"github.com/kattana-io/tron-objects-api/pkg/url"
+	"github.com/kattana-io/tron-objects-api/pkg/api/rest"
+	rest2 "github.com/kattana-io/tron-objects-api/pkg/client/rest"
+	rest3 "github.com/kattana-io/tron-objects-api/pkg/connector/sunswap/rest"
+	"github.com/kattana-io/tron-objects-api/pkg/types"
 	"log"
 	"math/big"
 	"time"
@@ -18,12 +19,12 @@ const (
 )
 
 func main() {
-	impl := api.NewAPI("", nil, url.NewTrongridURLProvider())
-	r := sunswap.NewRouter(impl)
+	impl := rest.NewAPI("", nil, rest2.NewTrongridURLProvider())
+	r := rest3.NewRouter(impl)
 	//nolint:gomnd
-	OneTrx, _ := big.NewInt(0).SetString("1000000000000000000", 10)
+	OneTrx, _ := big.NewInt(0).SetString("1000000000000000000", 10) //nolint:mnd
 	//nolint:lll
-	bts, selector, err := r.SwapETHToTokens(*api.FromBase58(usdt), OneTrx, *api.FromBase58(ZeroAddress), big.NewInt(time.Now().Add(time.Minute).Unix()))
+	bts, selector, err := r.SwapETHToTokens(*types.NewFromBase58(usdt), OneTrx, *types.NewFromBase58(ZeroAddress), big.NewInt(time.Now().Add(time.Minute).Unix()))
 	if err != nil {
 		log.Fatal(err)
 	}

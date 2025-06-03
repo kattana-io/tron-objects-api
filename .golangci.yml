@@ -1,12 +1,4 @@
 linters-settings:
-  depguard:
-    list-type: denylist
-    packages:
-      # logging is allowed only by logutils.Log, logrus
-      # is allowed to use only in logutils package
-      - github.com/sirupsen/logrus
-    packages-with-error-message:
-      - github.com/sirupsen/logrus: "logging is allowed only by logutils.Log"
   dupl:
     threshold: 100
   funlen:
@@ -35,7 +27,7 @@ linters-settings:
         replacement: 'any'
   goimports:
     local-prefixes: github.com/golangci/golangci-lint
-  gomnd:
+  mnd:
     # don't include the "operation" and "assign"
     checks:
       - argument
@@ -50,8 +42,8 @@ linters-settings:
     ignored-functions:
       - strings.SplitN
 
+  shadow: true
   govet:
-    check-shadowing: true
     settings:
       printf:
         funcs:
@@ -77,17 +69,18 @@ linters:
   disable-all: true
   enable:
     - bodyclose
+    #    - depguard
     - dogsled
     - dupl
     - errcheck
-    - exportloopref
+    - copyloopvar
     - funlen
     - gochecknoinits
     - goconst
     - gocritic
     - gocyclo
     - gofmt
-    - gomnd
+    - mnd
     - goprintffuncname
     - gosec
     - gosimple
@@ -127,8 +120,7 @@ issues:
   exclude-rules:
     - path: _test\.go
       linters:
-        - gomnd
-
+        - mnd
     - path: pkg/golinters/errcheck.go
       text: "SA1019: errCfg.Exclude is deprecated: use ExcludeFunctions instead"
     - path: pkg/commands/run.go
@@ -144,11 +136,13 @@ issues:
       text: "SA1019: (.+).(GoVersion|LangVersion) is deprecated: use the global `run.go` instead."
     - path: pkg/golinters/unused.go
       text: "rangeValCopy: each iteration copies 160 bytes \\(consider pointers or indexing\\)"
-
-run:
-  timeout: 5m
-  skip-dirs:
+  exclude-dirs:
     - test/testdata_etc # test files
     - internal/cache # extracted from Go code
     - internal/renameio # extracted from Go code
     - internal/robustio # extracted from Go code
+    - cmd/grpc-cli
+    - cmd/kafka-cli
+
+run:
+  timeout: 5m
