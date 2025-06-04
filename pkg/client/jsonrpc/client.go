@@ -80,7 +80,7 @@ type JSONRPCClient struct {
 	url string
 }
 
-func NewJSONRPCClient(url string) JSONRPCClientI {
+func NewJSONRPCClient(url string) *JSONRPCClient {
 	return &JSONRPCClient{
 		url: url,
 	}
