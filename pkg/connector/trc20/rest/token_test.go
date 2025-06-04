@@ -1,6 +1,7 @@
 package rest
 
 import (
+	"context"
 	"github.com/kattana-io/tron-objects-api/pkg/api/rest"
 	rest2 "github.com/kattana-io/tron-objects-api/pkg/client/rest"
 	"github.com/kattana-io/tron-objects-api/pkg/types"
@@ -70,7 +71,7 @@ func TestToken_GetDecimals(t1 *testing.T) {
 				api:     tt.fields.api,
 				address: tt.fields.address,
 			}
-			got, err := t.GetDecimals()
+			got, err := t.GetDecimals(context.Background())
 			if (err != nil) != tt.wantErr {
 				t1.Errorf("GetDecimals() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -78,6 +79,8 @@ func TestToken_GetDecimals(t1 *testing.T) {
 			if got != tt.want {
 				t1.Errorf("GetDecimals() got = %v, want %v", got, tt.want)
 			}
+
+			t1.Logf("GetDecimals(): %d", got)
 		})
 	}
 }
@@ -110,7 +113,7 @@ func TestToken_GetName(t1 *testing.T) {
 				api:     tt.fields.api,
 				address: tt.fields.address,
 			}
-			got, err := t.GetName()
+			got, err := t.GetName(context.Background())
 			if (err != nil) != tt.wantErr {
 				t1.Errorf("GetName() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -118,6 +121,8 @@ func TestToken_GetName(t1 *testing.T) {
 			if got != tt.want {
 				t1.Errorf("GetName() got = %v, want %v", got, tt.want)
 			}
+
+			t1.Logf("GetName(): %s", got)
 		})
 	}
 }
@@ -150,7 +155,7 @@ func TestToken_GetSymbol(t1 *testing.T) {
 				api:     tt.fields.api,
 				address: tt.fields.address,
 			}
-			got, err := t.GetSymbol()
+			got, err := t.GetSymbol(context.Background())
 			if (err != nil) != tt.wantErr {
 				t1.Errorf("GetSymbol() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -158,6 +163,8 @@ func TestToken_GetSymbol(t1 *testing.T) {
 			if got != tt.want {
 				t1.Errorf("GetSymbol() got = %v, want %v", got, tt.want)
 			}
+
+			t1.Logf("GetSymbol(): %s", got)
 		})
 	}
 }

@@ -1,6 +1,7 @@
 package rest
 
 import (
+	"context"
 	"github.com/kattana-io/tron-objects-api/pkg/api/rest"
 	"github.com/kattana-io/tron-objects-api/pkg/types"
 )
@@ -19,29 +20,28 @@ func New(imp *rest.API, address *types.Address) *Token {
 
 const maxRetry = 5
 
-func (t *Token) TryToGetDecimals(try int64) (int32, bool) {
+func (t *Token) TryToGetDecimals(ctx context.Context, try int64) (int32, bool) {
 	if try > maxRetry {
 		return 0, false
 	}
 
 	decimals, err := t.api.GetTokenDecimals(t.address.ToHex())
-
 	if err != nil {
 		try += 1
-		return t.TryToGetDecimals(try)
+		return t.TryToGetDecimals(ctx, try)
 	} else {
 		return decimals, true
 	}
 }
 
-func (t *Token) GetDecimals() (int32, error) {
+func (t *Token) GetDecimals(_ context.Context) (int32, error) {
 	return t.api.GetTokenDecimals(t.address.ToHex())
 }
 
-func (t *Token) GetSymbol() (string, error) {
+func (t *Token) GetSymbol(_ context.Context) (string, error) {
 	return t.api.GetTokenSymbol(t.address.ToHex())
 }
 
-func (t *Token) GetName() (string, error) {
-	return t.api.GetTokenSymbol(t.address.ToHex())
+func (t *Token) GetName(_ context.Context) (string, error) {
+	return t.api.GetTokenName(t.address.ToHex())
 }

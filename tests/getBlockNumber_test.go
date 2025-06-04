@@ -46,22 +46,3 @@ func TestGetBlockByNumber(t *testing.T) {
 
 	t.Logf("code: %+v", code)
 }
-
-// Don't work
-// func TestGetBlockByNumber(t *testing.T) {
-//	assert := testassert.New(t)
-//
-//	rpcClient, err := ethclient.Dial(url)
-//	assert.NoError(err, "should connect to RPC without error")
-//	defer rpcClient.Close()
-//
-//	//blockNumber := big.NewInt(16348182)
-//	hash := common.HexToHash("0x2f4efd102173a000eb2e1d4bb6e5474e48da7863ced0f925da8657c9dfca2746")
-//	t.Logf("blockHash: %s", hash.String())
-//
-//	block, _, err := rpcClient.TransactionByHash(context.Background(), hash)
-//	assert.NoError(err, "should get block by number without error")
-//	assert.NotNil(block, "block should not be nil")
-//
-//	t.Logf("block: %+v", block)
-// }

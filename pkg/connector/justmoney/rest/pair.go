@@ -1,8 +1,8 @@
 package rest
 
 import (
-	"errors"
 	"github.com/kattana-io/tron-objects-api/pkg/api/rest"
+	"github.com/kattana-io/tron-objects-api/pkg/connector/justmoney"
 	"github.com/kattana-io/tron-objects-api/pkg/types"
 )
 
@@ -24,7 +24,7 @@ func (s *Pair) Token0() (*types.Address, error) {
 		return types.NewEmptyAddress(), err
 	}
 	if res == "" {
-		return types.NewEmptyAddress(), errors.New(" not a justmoney pair")
+		return types.NewEmptyAddress(), justmoney.ErrNotJustMoneyPair
 	}
 	return types.NewFromHex(res), nil
 }
@@ -35,7 +35,7 @@ func (s *Pair) Token1() (*types.Address, error) {
 		return types.NewEmptyAddress(), err
 	}
 	if res == "" {
-		return types.NewEmptyAddress(), errors.New(" not a justmoney pair")
+		return types.NewEmptyAddress(), justmoney.ErrNotJustMoneyPair
 	}
 	return types.NewFromHex(res), nil
 }
