@@ -99,7 +99,6 @@ func TestToken_GetDecimals(t1 *testing.T) {
 	}
 }
 
-//nolint:dupl
 func TestToken_GetName(t1 *testing.T) {
 	ctx := context.Background()
 	logger := zap.NewNop()
@@ -143,7 +142,6 @@ func TestToken_GetName(t1 *testing.T) {
 	}
 }
 
-//nolint:dupl
 func TestToken_GetSymbol(t1 *testing.T) {
 	ctx := context.Background()
 	logger := zap.NewNop()

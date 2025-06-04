@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"github.com/ethereum/go-ethereum/common/hexutil"
-	"github.com/kattana-io/tron-objects-api/pkg/common"
 	"github.com/kattana-io/tron-objects-api/pkg/types"
 	"strconv"
 
@@ -94,7 +93,7 @@ func (a *API) GetTokenDecimals(token string) (int32, error) {
 		return defaultDecimals, err
 	}
 
-	result, err := strconv.ParseInt(common.TrimZeroes(data.ConstantResult[0]), 16, 16)
+	result, err := strconv.ParseInt(types.TrimZeroes(data.ConstantResult[0]), 16, 16)
 	if err != nil {
 		return defaultDecimals, err
 	}
@@ -153,7 +152,7 @@ func (a *API) GetToken0(pair string) (string, error) {
 		return "", err
 	}
 
-	return common.TrimZeroes(data.ConstantResult[0]), nil
+	return types.TrimZeroes(data.ConstantResult[0]), nil
 }
 
 func (a *API) GetToken1(pair string) (string, error) {
@@ -167,7 +166,7 @@ func (a *API) GetToken1(pair string) (string, error) {
 		return "", err
 	}
 
-	return common.TrimZeroes(data.ConstantResult[0]), nil
+	return types.TrimZeroes(data.ConstantResult[0]), nil
 }
 
 func (a *API) GetPairToken(pair string) (string, error) {
@@ -181,7 +180,7 @@ func (a *API) GetPairToken(pair string) (string, error) {
 		return "", err
 	}
 
-	return common.TrimZeroes(data.ConstantResult[0]), nil
+	return types.TrimZeroes(data.ConstantResult[0]), nil
 }
 
 func (a *API) GetPairReserves(pair string) (string, error) {
@@ -215,5 +214,5 @@ func (a *API) GetFactoryPair(factory, factoryOwner *types.Address, parameter str
 		return nil, errors.New("invalid result")
 	}
 
-	return types.NewFromHex(common.TrimZeroes(data.ConstantResult[0])), nil
+	return types.NewFromHex(types.TrimZeroes(data.ConstantResult[0])), nil
 }

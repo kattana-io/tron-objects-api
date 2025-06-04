@@ -70,7 +70,7 @@ func TestPair_Token0(t *testing.T) {
 			wantErr: true,
 		},
 	}
-	for _, tt := range tests {
+	for _, tt := range tests { //nolint:dupl
 		t.Run(tt.name, func(t *testing.T) {
 			s := &Pair{
 				api:  tt.fields.api,
@@ -113,7 +113,7 @@ func TestPair_Token1(t *testing.T) {
 			wantErr: false,
 		},
 	}
-	for _, tt := range tests {
+	for _, tt := range tests { //nolint:dupl
 		t.Run(tt.name, func(t *testing.T) {
 			s := &Pair{
 				api:  tt.fields.api,
