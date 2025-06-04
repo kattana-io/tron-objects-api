@@ -2,10 +2,13 @@ package jsonrpc
 
 import (
 	"github.com/ethereum/go-ethereum/ethclient"
+	"github.com/kattana-io/tron-objects-api/pkg/api"
 	"github.com/kattana-io/tron-objects-api/pkg/client/jsonrpc"
 
 	"go.uber.org/zap"
 )
+
+var _ api.API = &API{}
 
 type API struct {
 	url       string

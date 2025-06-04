@@ -3,10 +3,12 @@ package jsonrpc
 import (
 	"context"
 	"fmt"
+	"testing"
+
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/kattana-io/tron-objects-api/pkg/models"
 	"github.com/kattana-io/tron-objects-api/pkg/types"
 	testassert "github.com/stretchr/testify/assert"
-	"testing"
 )
 
 const (
@@ -24,7 +26,23 @@ const (
 	// sunswapV2FactoryAddrBase58 = "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY"
 )
 
-func TestGetBlockByNum(t *testing.T) {
+func Test_GetCode(t *testing.T) {
+	assert := testassert.New(t)
+
+	ctx := context.Background()
+	cli := NewJSONRPCClient(rpcURL)
+
+	usdtHexAddr := types.NewFromBase58(usdtAddrBase58).ToGoEthAddr()
+
+	tag := "latest"
+	runtimeCode, err := cli.GetCode(ctx, usdtHexAddr, tag)
+	assert.NoError(err, "should not error on getCode")
+	assert.NotEmpty(runtimeCode, "runtime code should not be empty")
+
+	t.Logf("runtimeCode: %+v", runtimeCode)
+}
+
+func Test_GetBlockByNum(t *testing.T) {
 	assert := testassert.New(t)
 
 	ctx := context.Background()
@@ -43,7 +61,7 @@ func TestGetBlockByNum(t *testing.T) {
 	t.Logf("block: %+v", block)
 }
 
-func TestGetTransactionByHash(t *testing.T) {
+func Test_GetTransactionByHash(t *testing.T) {
 	assert := testassert.New(t)
 
 	ctx := context.Background()
@@ -60,7 +78,7 @@ func TestGetTransactionByHash(t *testing.T) {
 	t.Logf("tx: %+v", tx)
 }
 
-func TestGetTransactionByBlockNumAndIndex(t *testing.T) {
+func Test_GetTransactionByBlockNumAndIndex(t *testing.T) {
 	assert := testassert.New(t)
 
 	ctx := context.Background()
@@ -78,23 +96,39 @@ func TestGetTransactionByBlockNumAndIndex(t *testing.T) {
 	t.Logf("tx: %+v", tx)
 }
 
-func TestGetCode(t *testing.T) {
+func Test_GetTransactionReceipt(t *testing.T) {
 	assert := testassert.New(t)
 
 	ctx := context.Background()
 	cli := NewJSONRPCClient(rpcURL)
 
-	usdtHexAddr := types.NewFromBase58(usdtAddrBase58).ToGoEthAddr()
+	hash := common.HexToHash("0x5b8ef93cded9ffe7f250e5c5bbbee6a935ad25d80415a6fcd847bb6f6e3b4076")
 
-	tag := "latest"
-	runtimeCode, err := cli.GetCode(ctx, usdtHexAddr, tag)
-	assert.NoError(err, "should not error on getCode")
-	assert.NotEmpty(runtimeCode, "runtime code should not be empty")
+	tx, err := cli.GetTransactionReceipt(ctx, hash)
+	assert.NoError(err, "GetTransactionReceipt should not error")
+	assert.NotNil(tx, "transaction receipt should not be nil")
+	assert.NotEmpty(tx.TransactionHash, "transaction hash should not be empty")
+	assert.NotEmpty(tx.BlockNumber, "block number should not be empty")
 
-	t.Logf("runtimeCode: %+v", runtimeCode)
+	t.Logf("transaction receipt: %+v", tx)
 }
 
-func TestGetTRC20Decimals(t *testing.T) {
+func Test_GetLogs(t *testing.T) {
+	assert := testassert.New(t)
+
+	ctx := context.Background()
+	cli := NewJSONRPCClient(rpcURL)
+
+	hash := common.HexToHash("0x000000000456c76cc8bb8cdf2d7f6f8a49ee5c58cc58c511f7976211e7b08ff3")
+
+	logs, err := cli.GetLogs(ctx, &models.GetLogsRequest{BlockHash: hash})
+	assert.NoError(err, "GetLogs should not error")
+	assert.NotNil(logs, "logs should not be nil")
+
+	t.Logf("logs receipt: %+v", logs)
+}
+
+func Test_GetTRC20Decimals(t *testing.T) {
 	assert := testassert.New(t)
 
 	ctx := context.Background()
@@ -109,7 +143,7 @@ func TestGetTRC20Decimals(t *testing.T) {
 	t.Log("decimals", decimals)
 }
 
-func TestGetTRC20Name(t *testing.T) {
+func Test_GetTRC20Name(t *testing.T) {
 	assert := testassert.New(t)
 
 	ctx := context.Background()
@@ -124,7 +158,7 @@ func TestGetTRC20Name(t *testing.T) {
 	t.Log("name", name)
 }
 
-func TestGetTRC20Symbol(t *testing.T) {
+func Test_GetTRC20Symbol(t *testing.T) {
 	assert := testassert.New(t)
 
 	ctx := context.Background()
@@ -139,7 +173,7 @@ func TestGetTRC20Symbol(t *testing.T) {
 	t.Log("symbol", symbol)
 }
 
-func TestGetToken0(t *testing.T) {
+func Test_GetToken0(t *testing.T) {
 	assert := testassert.New(t)
 
 	ctx := context.Background()
@@ -157,7 +191,7 @@ func TestGetToken0(t *testing.T) {
 	t.Log("token0", token0)
 }
 
-func TestGetToken1(t *testing.T) {
+func Test_GetToken1(t *testing.T) {
 	assert := testassert.New(t)
 
 	ctx := context.Background()
@@ -175,7 +209,7 @@ func TestGetToken1(t *testing.T) {
 	t.Log("token1", token1)
 }
 
-func TestGetPairToken(t *testing.T) {
+func Test_GetPairToken(t *testing.T) {
 	assert := testassert.New(t)
 
 	ctx := context.Background()
@@ -193,7 +227,7 @@ func TestGetPairToken(t *testing.T) {
 	t.Log("pairToken", pairToken)
 }
 
-func TestGetPair(t *testing.T) {
+func Test_GetPair(t *testing.T) {
 	assert := testassert.New(t)
 
 	ctx := context.Background()
@@ -213,7 +247,7 @@ func TestGetPair(t *testing.T) {
 	t.Log("pair", pairHex)
 }
 
-func TestGetReserves(t *testing.T) {
+func Test_GetReserves(t *testing.T) {
 	assert := testassert.New(t)
 
 	ctx := context.Background()

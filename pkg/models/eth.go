@@ -1,6 +1,6 @@
 package models
 
-import "math/big"
+import "github.com/ethereum/go-ethereum/common"
 
 type Block struct {
 	BaseFeePerGas    string        `json:"baseFeePerGas"`
@@ -55,8 +55,39 @@ type ContractInfo struct {
 	// } `json:"smart_contract"`
 }
 
-type Reserves struct {
-	Reserve0           *big.Int `json:"reserve0"`
-	Reserve1           *big.Int `json:"reserve1"`
-	BlockTimestampLast uint32   `json:"block_timestamp_last"`
+type TransactionReceipt struct {
+	BlockHash         string  `json:"blockHash"`
+	BlockNumber       string  `json:"blockNumber"`
+	ContractAddress   *string `json:"contractAddress"`
+	CumulativeGasUsed string  `json:"cumulativeGasUsed"`
+	EffectiveGasPrice string  `json:"effectiveGasPrice"`
+	From              string  `json:"from"`
+	GasUsed           string  `json:"gasUsed"`
+	Logs              []Log   `json:"logs"`
+	LogsBloom         string  `json:"logsBloom"`
+	Status            string  `json:"status"`
+	To                string  `json:"to"`
+	TransactionHash   string  `json:"transactionHash"`
+	TransactionIndex  string  `json:"transactionIndex"`
+	Type              string  `json:"type"`
+}
+
+type Log struct {
+	Address          string   `json:"address"`
+	BlockHash        string   `json:"blockHash"`
+	BlockNumber      string   `json:"blockNumber"`
+	Data             string   `json:"data"`
+	LogIndex         string   `json:"logIndex"`
+	Removed          bool     `json:"removed"`
+	Topics           []string `json:"topics"`
+	TransactionHash  string   `json:"transactionHash"`
+	TransactionIndex string   `json:"transactionIndex"`
+}
+
+type GetLogsRequest struct {
+	FromBlock string           `json:"fromBlock,omitempty"`
+	ToBlock   string           `json:"toBlock,omitempty"`
+	Address   []common.Address `json:"address,omitempty"`
+	Topics    []common.Hash    `json:"topics,omitempty"`
+	BlockHash common.Hash      `json:"blockHash,omitempty"`
 }

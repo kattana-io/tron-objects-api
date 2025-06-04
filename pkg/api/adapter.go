@@ -2,16 +2,22 @@ package api
 
 import (
 	"context"
+	"math/big"
+
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/kattana-io/tron-objects-api/pkg/models"
 )
 
 type API interface {
 	GetBlockNumber(ctx context.Context) (uint64, error)
+	GetSuggestGasPrice(ctx context.Context) (*big.Int, error)
+	GetContractInfo(ctx context.Context, contract common.Address) (*models.ContractInfo, error)
+	GetBalanceAt(ctx context.Context, account common.Address, block *big.Int) (*big.Int, error)
 	GetBlockByNum(ctx context.Context, num int64) (*models.Block, error)
 	GetTransactionByHash(ctx context.Context, hash common.Hash) (*models.Transaction, error)
 	GetTransactionByBlockNum(ctx context.Context, num int64) (*models.Transaction, error)
-	GetContractInfo(ctx context.Context, contract common.Address) (*models.ContractInfo, error)
+	GetTransactionReceipt(ctx context.Context, hash common.Hash) (*models.TransactionReceipt, error)
+	GetLogs(ctx context.Context, req *models.GetLogsRequest) ([]models.Log, error)
 
 	GetTRC20Decimal(ctx context.Context, token common.Address) (uint8, error)
 	GetTRC20Name(ctx context.Context, token common.Address) (string, error)
