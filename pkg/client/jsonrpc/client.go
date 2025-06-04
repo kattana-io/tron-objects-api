@@ -61,14 +61,14 @@ var (
 
 type JSONRPCClientI interface {
 	GetBlockByNum(ctx context.Context, num int64, fullTxs bool) (*models.Block, error)
-	GetTransactionByHash(ctx context.Context, hash string) (*models.Transaction, error)
+	GetTransactionByHash(ctx context.Context, hash common.Hash) (*models.Transaction, error)
 	GetTransactionByBlockNumAndIndex(ctx context.Context, num int64, index int64) (*models.Transaction, error)
 	GetCode(ctx context.Context, contract common.Address, tag string) (string, error)
 
 	GetToken0(ctx context.Context, pair common.Address) (string, error)
 	GetToken1(ctx context.Context, pair common.Address) (string, error)
 	GetPairToken(ctx context.Context, contract common.Address) (string, error)
-	GetReserves(ctx context.Context, pair common.Address) (string, error)
+	GetReserves(ctx context.Context, pair common.Address) (*big.Int, *big.Int, uint32, error)
 	GetPair(ctx context.Context, factory, tokenA, tokenB common.Address) (string, error)
 
 	GetTRC20Decimals(ctx context.Context, token common.Address) (uint8, error)
@@ -80,7 +80,7 @@ type JSONRPCClient struct {
 	url string
 }
 
-func NewJSONRPCClient(url string) *JSONRPCClient {
+func NewJSONRPCClient(url string) JSONRPCClientI {
 	return &JSONRPCClient{
 		url: url,
 	}
